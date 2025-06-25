@@ -1,5 +1,5 @@
 import Contact from './contact.model.js';
-import { sendEmail } from '../../utils/emailService.js';
+import { sendMail } from '../../utils/emailService.js';
 
 // @desc    Create a new contact message
 // @route   POST /api/contact
@@ -19,7 +19,7 @@ export const createContactMessage = async (req, res, next) => {
 
     // Send email notification
     try {
-      await sendEmail({
+      await sendMail({
         to: process.env.EMAIL_USER, // Your email address
         from: process.env.EMAIL_USER,
         subject: `New Contact Form Submission: ${subject}`,

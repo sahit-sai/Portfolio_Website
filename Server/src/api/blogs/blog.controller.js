@@ -1,5 +1,6 @@
 import Blog from "./blog.model.js";
 import asyncHandler from "express-async-handler";
+import mongoose from "mongoose";
 
 // @desc    Get all blog posts
 // @route   GET /api/blogs
@@ -13,9 +14,15 @@ export const getBlogs = asyncHandler(async (req, res) => {
 // @route   GET /api/blogs/:id
 // @access  Public
 export const getBlogById = asyncHandler(async (req, res) => {
+  if (!mongoose.Types.ObjectId.isValid(req.params.id)) {
+    res.status(400);
+    throw new Error("Invalid blog ID");
+  }
   const blog = await Blog.findById(req.params.id);
 
   if (blog) {
+    blog.views += 1;
+    await blog.save();
     res.json(blog);
   } else {
     res.status(404);
@@ -27,24 +34,26 @@ export const getBlogById = asyncHandler(async (req, res) => {
 // @route   POST /api/blogs
 // @access  Private/Admin
 export const createBlog = asyncHandler(async (req, res) => {
-  const { title, content, author, tags } = req.body;
+  const { title, content, author, tags, category, featured, trending } =
+    req.body;
 
   if (!req.file) {
-    res.status(400);
     throw new Error("Image is required");
   }
+  const image = req.file.filename;
 
-  const imageUrl = `/uploads/blogs/${req.file.filename}`;
-
-  const blog = new Blog({
+  const newBlog = new Blog({
     title,
     content,
     author,
-    imageUrl,
+    image,
     tags,
+    category,
+    featured,
+    trending,
   });
 
-  const createdBlog = await blog.save();
+  const createdBlog = await newBlog.save();
   res.status(201).json(createdBlog);
 });
 
@@ -52,7 +61,8 @@ export const createBlog = asyncHandler(async (req, res) => {
 // @route   PUT /api/blogs/:id
 // @access  Private/Admin
 export const updateBlog = asyncHandler(async (req, res) => {
-  const { title, content, author, tags } = req.body;
+  const { title, content, author, tags, category, featured, trending } =
+    req.body;
   const blog = await Blog.findById(req.params.id);
 
   if (blog) {
@@ -60,9 +70,12 @@ export const updateBlog = asyncHandler(async (req, res) => {
     blog.content = content || blog.content;
     blog.author = author || blog.author;
     blog.tags = tags || blog.tags;
+    blog.category = category || blog.category;
+    blog.featured = featured !== undefined ? featured : blog.featured;
+    blog.trending = trending !== undefined ? trending : blog.trending;
 
     if (req.file) {
-      blog.imageUrl = `/uploads/blogs/${req.file.filename}`;
+      blog.image = req.file.filename;
     }
 
     const updatedBlog = await blog.save();
@@ -82,6 +95,45 @@ export const deleteBlog = asyncHandler(async (req, res) => {
   if (blog) {
     await blog.deleteOne(); // Corrected from remove()
     res.json({ message: "Blog post removed" });
+  } else {
+    res.status(404);
+    throw new Error("Blog post not found");
+  }
+});
+
+// @desc    Like a blog post
+// @route   PUT /api/blogs/:id/like
+// @access  Public
+export const likeBlog = asyncHandler(async (req, res) => {
+  const blog = await Blog.findById(req.params.id);
+
+  if (blog) {
+    blog.likes += 1;
+    const updatedBlog = await blog.save();
+    res.json(updatedBlog);
+  } else {
+    res.status(404);
+    throw new Error("Blog post not found");
+  }
+});
+
+// @desc    Add a comment to a blog post
+// @route   POST /api/blogs/:id/comments
+// @access  Public
+export const addCommentToBlog = asyncHandler(async (req, res) => {
+  const { author, content } = req.body;
+  const blog = await Blog.findById(req.params.id);
+
+  if (blog) {
+    const comment = {
+      author,
+      content,
+    };
+
+    blog.comments.push(comment);
+
+    const updatedBlog = await blog.save();
+    res.status(201).json(updatedBlog);
   } else {
     res.status(404);
     throw new Error("Blog post not found");

@@ -7,6 +7,7 @@ import projectRoutes from "./src/api/projects/project.routes.js";
 import testimonialRoutes from "./src/api/testimonials/testimonial.routes.js";
 import contactRoutes from "./src/api/contact/contact.routes.js";
 import blogRoutes from "./src/api/blogs/blog.routes.js";
+import subscriberRoutes from "./src/api/subscribers/subscriber.routes.js";
 import path from "path";
 import { fileURLToPath } from "url";
 
@@ -36,6 +37,7 @@ app.use("/api/projects", projectRoutes);
 app.use("/api/testimonials", testimonialRoutes);
 app.use("/api/contact", contactRoutes);
 app.use("/api/blogs", blogRoutes);
+app.use("/api/subscribe", subscriberRoutes);
 
 // Error handling middleware
 app.use((err, req, res, next) => {
