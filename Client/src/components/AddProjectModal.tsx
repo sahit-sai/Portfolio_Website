@@ -13,7 +13,7 @@ import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { Textarea } from '@/components/ui/textarea';
 import { addProject, updateProject } from '@/redux/slices/projectsSlice';
-import { AppDispatch } from '@/redux/store/store';
+import { AppDispatch } from '@/redux/store';
 import { toast } from 'sonner';
 
 export const AddProjectModal = ({ isOpen, onClose, project }) => {
@@ -21,44 +21,48 @@ export const AddProjectModal = ({ isOpen, onClose, project }) => {
   const [title, setTitle] = useState('');
   const [description, setDescription] = useState('');
   const [category, setCategory] = useState('');
-  const [liveUrl, setLiveUrl] = useState(''); const [githubUrl, setGithubUrl] = useState('');
+  const [liveUrl, setLiveUrl] = useState('');
+  const [githubUrl, setGithubUrl] = useState('');
   const [technologies, setTechnologies] = useState('');
-  const [image, setImage] = useState(null);
+  const [image, setImage] = useState('');
 
   useEffect(() => {
     if (project) {
       setTitle(project.title);
-      setDescription(project.description); setCategory(project.category);
+      setDescription(project.description);
+      setCategory(project.category);
       setLiveUrl(project.liveUrl);
       setGithubUrl(project.githubUrl);
       setTechnologies(project.tags ? project.tags.join(', ') : '');
+      setImage(project.image);
     } else {
       setTitle('');
       setDescription('');
-      setCategory(''); setLiveUrl('');
+      setCategory('');
+      setLiveUrl('');
       setGithubUrl('');
       setTechnologies('');
-      setImage(null);
+      setImage('');
     }
   }, [project]);
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    const formData = new FormData();
-    formData.append('title', title);
-    formData.append('description', description); formData.append('category', category);
-    formData.append('liveUrl', liveUrl);
-    formData.append('githubUrl', githubUrl);
-    formData.append('technologies', technologies);
-    if (image) {
-      formData.append('image', image);
-    }
+    const projectData = {
+      title,
+      description,
+      category,
+      liveUrl,
+      githubUrl,
+      technologies,
+      image,
+    };
 
     if (project) {
-      dispatch(updateProject({ id: project._id, projectData: formData }));
+      dispatch(updateProject({ id: project._id, projectData }));
       toast.success('Project updated successfully!');
     } else {
-      dispatch(addProject(formData));
+      dispatch(addProject(projectData));
       toast.success('Project added successfully!');
     }
     onClose();
@@ -86,6 +90,12 @@ export const AddProjectModal = ({ isOpen, onClose, project }) => {
                 Description
               </Label>
               <Textarea id="description" value={description} onChange={(e) => setDescription(e.target.value)} className="col-span-3" />
+            </div>
+            <div className="grid grid-cols-4 items-center gap-4">
+              <Label htmlFor="image" className="text-right">
+                Image URL
+              </Label>
+              <Input id="image" value={image} onChange={(e) => setImage(e.target.value)} className="col-span-3" />
             </div>
             <div className="grid grid-cols-4 items-center gap-4">
               <Label htmlFor="category" className="text-right">
@@ -129,18 +139,6 @@ export const AddProjectModal = ({ isOpen, onClose, project }) => {
                 onChange={(e) => setTechnologies(e.target.value)}
                 className="col-span-3"
                 placeholder="React, Node.js, MongoDB (comma separated)"
-              />
-            </div>
-            <div className="grid grid-cols-4 items-center gap-4">
-              <Label htmlFor="image" className="text-right">
-                Image
-              </Label>
-              <Input
-                id="image"
-                type="file"
-                accept="image/*"
-                onChange={e => setImage(e.target.files[0])}
-                className="col-span-3"
               />
             </div>
           </div>

@@ -1,18 +1,14 @@
 import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
-import axios from "axios";
-
-const API_URL = `${
-  import.meta.env.VITE_API_URL || "http://localhost:3001"
-}/api/projects`;
+import apiClient from "../../api";
 
 // Async thunk for fetching projects
 export const getProjects = createAsyncThunk(
   "projects/getProjects",
   async (_, { rejectWithValue }) => {
     try {
-      const response = await axios.get(API_URL);
+      const response = await apiClient.get("/projects");
       return response.data;
-    } catch (error) {
+    } catch (error: any) {
       return rejectWithValue(error.response.data);
     }
   }
@@ -21,18 +17,17 @@ export const getProjects = createAsyncThunk(
 // Async thunk for adding a project
 export const addProject = createAsyncThunk(
   "projects/addProject",
-  async (projectData: FormData, { getState, rejectWithValue }) => {
+  async (projectData: any, { getState, rejectWithValue }) => {
     try {
       const token =
         (getState() as any).auth.token || localStorage.getItem("token");
-      const response = await axios.post(API_URL, projectData, {
+      const response = await apiClient.post("/projects", projectData, {
         headers: {
-          "Content-Type": "multipart/form-data",
           Authorization: `Bearer ${token}`,
         },
       });
       return response.data;
-    } catch (error) {
+    } catch (error: any) {
       return rejectWithValue(error.response.data);
     }
   }
@@ -42,20 +37,19 @@ export const addProject = createAsyncThunk(
 export const updateProject = createAsyncThunk(
   "projects/updateProject",
   async (
-    { id, projectData }: { id: string; projectData: FormData },
+    { id, projectData }: { id: string; projectData: any },
     { getState, rejectWithValue }
   ) => {
     try {
       const token =
         (getState() as any).auth.token || localStorage.getItem("token");
-      const response = await axios.put(`${API_URL}/${id}`, projectData, {
+      const response = await apiClient.put(`/projects/${id}`, projectData, {
         headers: {
-          "Content-Type": "multipart/form-data",
           Authorization: `Bearer ${token}`,
         },
       });
       return response.data;
-    } catch (error) {
+    } catch (error: any) {
       return rejectWithValue(error.response.data);
     }
   }
@@ -68,13 +62,13 @@ export const deleteProject = createAsyncThunk(
     try {
       const token =
         (getState() as any).auth.token || localStorage.getItem("token");
-      await axios.delete(`${API_URL}/${id}`, {
+      await apiClient.delete(`/projects/${id}`, {
         headers: {
           Authorization: `Bearer ${token}`,
         },
       });
       return id;
-    } catch (error) {
+    } catch (error: any) {
       return rejectWithValue(error.response.data);
     }
   }

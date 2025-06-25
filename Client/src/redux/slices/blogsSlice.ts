@@ -1,10 +1,6 @@
 import { createSlice, createAsyncThunk, PayloadAction } from "@reduxjs/toolkit";
-import axios from "axios";
+import apiClient from "../../api";
 import { Blog } from "../../types"; // Assuming you have a types file
-
-const API_URL = `${
-  import.meta.env.VITE_API_URL || "http://localhost:3001"
-}/api/blogs`;
 
 interface Blog {
   _id: string;
@@ -36,9 +32,9 @@ export const getBlogs = createAsyncThunk(
   "blogs/getBlogs",
   async (_, { rejectWithValue }) => {
     try {
-      const response = await axios.get(API_URL);
+      const response = await apiClient.get("/blogs");
       return response.data;
-    } catch (error) {
+    } catch (error: any) {
       return rejectWithValue(error.response.data);
     }
   }
@@ -49,9 +45,9 @@ export const getBlogById = createAsyncThunk(
   "blogs/getBlogById",
   async (id: string, { rejectWithValue }) => {
     try {
-      const response = await axios.get(`${API_URL}/${id}`);
+      const response = await apiClient.get(`/blogs/${id}`);
       return response.data;
-    } catch (error) {
+    } catch (error: any) {
       return rejectWithValue(error.response.data);
     }
   }
@@ -60,18 +56,17 @@ export const getBlogById = createAsyncThunk(
 // Async thunk for adding a blog
 export const addBlog = createAsyncThunk(
   "blogs/addBlog",
-  async (blogData: FormData, { getState, rejectWithValue }) => {
+  async (blogData: { title: string; content: string; image: string }, { getState, rejectWithValue }) => {
     try {
       const token =
         (getState() as any).auth.token || localStorage.getItem("token");
-      const response = await axios.post(API_URL, blogData, {
+      const response = await apiClient.post("/blogs", blogData, {
         headers: {
-          "Content-Type": "multipart/form-data",
           Authorization: `Bearer ${token}`,
         },
       });
       return response.data;
-    } catch (error) {
+    } catch (error: any) {
       return rejectWithValue(error.response.data);
     }
   }
@@ -81,20 +76,19 @@ export const addBlog = createAsyncThunk(
 export const updateBlog = createAsyncThunk(
   "blogs/updateBlog",
   async (
-    { id, blogData }: { id: string; blogData: FormData },
+    { id, blogData }: { id: string; blogData: { title: string; content: string; image: string } },
     { getState, rejectWithValue }
   ) => {
     try {
       const token =
         (getState() as any).auth.token || localStorage.getItem("token");
-      const response = await axios.put(`${API_URL}/${id}`, blogData, {
+      const response = await apiClient.put(`/blogs/${id}`, blogData, {
         headers: {
-          "Content-Type": "multipart/form-data",
           Authorization: `Bearer ${token}`,
         },
       });
       return response.data;
-    } catch (error) {
+    } catch (error: any) {
       return rejectWithValue(error.response.data);
     }
   }
@@ -107,13 +101,28 @@ export const deleteBlog = createAsyncThunk(
     try {
       const token =
         (getState() as any).auth.token || localStorage.getItem("token");
-      await axios.delete(`${API_URL}/${id}`, {
+      await apiClient.delete(`/blogs/${id}`, {
         headers: {
           Authorization: `Bearer ${token}`,
         },
       });
       return id;
-    } catch (error) {
+    } catch (error: any) {
+      return rejectWithValue(error.response.data);
+    }
+  }
+);
+
+// Async thunk for fetching related blogs
+export const getRelatedBlogs = createAsyncThunk(
+  "blogs/getRelatedBlogs",
+  async (tags: string[], { rejectWithValue }) => {
+    try {
+      const response = await apiClient.get(
+        `/blogs/related?tags=${tags.join(",")}`
+      );
+      return response.data;
+    } catch (error: any) {
       return rejectWithValue(error.response.data);
     }
   }
@@ -124,7 +133,7 @@ export const likeBlog = createAsyncThunk(
   "blogs/likeBlog",
   async (id: string, { rejectWithValue }) => {
     try {
-      const response = await axios.put(`${API_URL}/${id}/like`);
+      const response = await apiClient.post(`/blogs/${id}/like`);
       return response.data;
     } catch (error: any) {
       return rejectWithValue(error.response.data);
@@ -136,19 +145,22 @@ export const likeBlog = createAsyncThunk(
 export const addComment = createAsyncThunk(
   "blogs/addComment",
   async (
-    {
-      blogId,
-      author,
-      content,
-    }: { blogId: string; author: string; content: string },
-    { rejectWithValue }
+    { blogId, commentData }: { blogId: string; commentData: any },
+    { getState, rejectWithValue }
   ) => {
     try {
-      const { data } = await axios.post(`${API_URL}/${blogId}/comments`, {
-        author,
-        content,
-      });
-      return data;
+      const token =
+        (getState() as any).auth.token || localStorage.getItem("token");
+      const response = await apiClient.post(
+        `/blogs/${blogId}/comments`,
+        commentData,
+        {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        }
+      );
+      return response.data;
     } catch (error: any) {
       return rejectWithValue(error.response.data);
     }
@@ -221,22 +233,25 @@ const blogsSlice = createSlice({
         const updatedBlog = action.payload.blog || action.payload;
         if (updatedBlog) {
           state.currentBlog = updatedBlog;
-          const index = state.blogs.findIndex(
-            (b) => b._id === updatedBlog._id
-          );
+          const index = state.blogs.findIndex((b) => b._id === updatedBlog._id);
           if (index !== -1) {
             state.blogs[index] = updatedBlog;
           }
         }
       })
+      .addCase(
+        getRelatedBlogs.fulfilled,
+        (state, action: PayloadAction<any>) => {
+          state.isLoading = false;
+          state.relatedBlogs = action.payload.blogs || action.payload;
+        }
+      )
       .addCase(addComment.fulfilled, (state, action: PayloadAction<any>) => {
         state.isLoading = false;
         const updatedBlog = action.payload.blog || action.payload;
         if (updatedBlog) {
           state.currentBlog = updatedBlog;
-          const index = state.blogs.findIndex(
-            (b) => b._id === updatedBlog._id
-          );
+          const index = state.blogs.findIndex((b) => b._id === updatedBlog._id);
           if (index !== -1) {
             state.blogs[index] = updatedBlog;
           }

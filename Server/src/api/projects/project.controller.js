@@ -16,13 +16,13 @@ export const getProjects = async (req, res, next) => {
 // @route   POST /api/projects
 // @access  Private
 export const createProject = async (req, res, next) => {
-  const { title, description, category, liveUrl, githubUrl, technologies } = req.body;
+  const { title, description, category, liveUrl, githubUrl, technologies, image } = req.body;
 
   try {
     const newProject = new Project({
       title,
       description,
-      image: req.file ? `/uploads/projects/${req.file.filename}` : '',
+      image,
       category,
       liveUrl,
       githubUrl,
@@ -40,7 +40,7 @@ export const createProject = async (req, res, next) => {
 // @route   PUT /api/projects/:id
 // @access  Private
 export const updateProject = async (req, res, next) => {
-  const { title, description, category, liveUrl, githubUrl, technologies } = req.body;
+  const { title, description, category, liveUrl, githubUrl, technologies, image } = req.body;
 
   try {
     let project = await Project.findById(req.params.id);
@@ -56,10 +56,7 @@ export const updateProject = async (req, res, next) => {
     project.liveUrl = liveUrl || project.liveUrl;
     project.githubUrl = githubUrl || project.githubUrl;
     project.tags = technologies ? technologies.split(',').map(tech => tech.trim()) : project.tags;
-
-    if (req.file) {
-        project.image = `/uploads/projects/${req.file.filename}`;
-    }
+    project.image = image || project.image;
 
     project = await project.save();
 

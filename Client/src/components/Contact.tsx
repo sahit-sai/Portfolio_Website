@@ -28,7 +28,7 @@ import {
   Rocket,
 } from "lucide-react"
 import { useToast } from "@/hooks/use-toast"
-import emailjs from "@emailjs/browser"
+import apiClient from "../api"
 
 interface FormData {
   name: string
@@ -48,29 +48,13 @@ export const Contact = () => {
   const [submitStatus, setSubmitStatus] = useState<"idle" | "success" | "error">("idle")
   const { toast } = useToast()
 
-  // Initialize EmailJS (you'll need to replace these with your actual values)
-  const SERVICE_ID = "your_service_id"
-  const TEMPLATE_ID = "your_template_id"
-  const PUBLIC_KEY = "your_public_key"
-
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault()
     setIsSubmitting(true)
+    setSubmitStatus("idle")
 
     try {
-      // Send email using EmailJS
-      await emailjs.send(
-        SERVICE_ID,
-        TEMPLATE_ID,
-        {
-          from_name: formData.name,
-          from_email: formData.email,
-          subject: formData.subject,
-          message: formData.message,
-          to_email: "krishna.chavan@email.com", // Your email
-        },
-        PUBLIC_KEY,
-      )
+      await apiClient.post("/api/contact", formData)
 
       setSubmitStatus("success")
       toast({

@@ -34,13 +34,12 @@ export const getBlogById = asyncHandler(async (req, res) => {
 // @route   POST /api/blogs
 // @access  Private/Admin
 export const createBlog = asyncHandler(async (req, res) => {
-  const { title, content, author, tags, category, featured, trending } =
+  const { title, content, author, tags, category, featured, trending, image } =
     req.body;
 
-  if (!req.file) {
-    throw new Error("Image is required");
+  if (!image) {
+    throw new Error("Image URL is required");
   }
-  const image = req.file.filename;
 
   const newBlog = new Blog({
     title,
@@ -61,7 +60,7 @@ export const createBlog = asyncHandler(async (req, res) => {
 // @route   PUT /api/blogs/:id
 // @access  Private/Admin
 export const updateBlog = asyncHandler(async (req, res) => {
-  const { title, content, author, tags, category, featured, trending } =
+  const { title, content, author, tags, category, featured, trending, image } =
     req.body;
   const blog = await Blog.findById(req.params.id);
 
@@ -73,10 +72,7 @@ export const updateBlog = asyncHandler(async (req, res) => {
     blog.category = category || blog.category;
     blog.featured = featured !== undefined ? featured : blog.featured;
     blog.trending = trending !== undefined ? trending : blog.trending;
-
-    if (req.file) {
-      blog.image = req.file.filename;
-    }
+    blog.image = image || blog.image;
 
     const updatedBlog = await blog.save();
     res.json(updatedBlog);

@@ -1,7 +1,5 @@
 import { createSlice, createAsyncThunk } from '@reduxjs/toolkit';
-import axios from 'axios';
-
-const API_URL = `${import.meta.env.VITE_API_URL || 'http://localhost:3001'}/api`;
+import apiClient from '../../api';
 
 export interface TimelineItem {
   _id: string;
@@ -25,9 +23,13 @@ const initialState: TimelineState = {
   error: null,
 };
 
-export const fetchTimeline = createAsyncThunk('timeline/fetchTimeline', async () => {
-  const response = await axios.get(`${API_URL}/timeline`);
-  return response.data;
+export const fetchTimeline = createAsyncThunk('timeline/fetchTimeline', async (_, { rejectWithValue }) => {
+  try {
+    const response = await apiClient.get('/timeline');
+    return response.data;
+  } catch (error: any) {
+    return rejectWithValue(error.response?.data?.message || error.message || 'Failed to fetch timeline');
+  }
 });
 
 const timelineSlice = createSlice({
@@ -45,7 +47,7 @@ const timelineSlice = createSlice({
       })
       .addCase(fetchTimeline.rejected, (state, action) => {
         state.status = 'failed';
-        state.error = action.error.message || 'Failed to fetch timeline';
+        state.error = action.payload as string;
       });
   },
 });

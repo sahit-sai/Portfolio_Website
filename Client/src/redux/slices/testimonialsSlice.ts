@@ -1,24 +1,43 @@
 import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
-import axios from "axios";
+import apiClient from "../../api";
 
-const API_URL = `${
-  import.meta.env.VITE_API_URL || "http://localhost:3001"
-}/api/testimonials`;
+interface Testimonial {
+  _id: string;
+  name: string;
+  company: string;
+  quote: string;
+  rating: number;
+  image: string;
+}
+
+interface TestimonialsState {
+  testimonials: Testimonial[];
+  status: "idle" | "loading" | "succeeded" | "failed";
+  error: string | null;
+}
+
+const initialState: TestimonialsState = {
+  testimonials: [],
+  status: "idle",
+  error: null,
+};
 
 interface TestimonialData {
   name: string;
   quote: string;
   company: string;
+  image: string;
+  rating: number;
 }
 
 export const fetchTestimonials = createAsyncThunk(
   "testimonials/fetchTestimonials",
   async (_, { rejectWithValue }) => {
     try {
-      const response = await axios.get(API_URL);
+      const response = await apiClient.get("/testimonials");
       return response.data;
-    } catch (error) {
-      return rejectWithValue(error.response.data);
+    } catch (error: any) {
+      return rejectWithValue(error.response?.data?.message || error.message);
     }
   }
 );
@@ -29,14 +48,18 @@ export const addTestimonial = createAsyncThunk(
     try {
       const token =
         (getState() as any).auth.token || localStorage.getItem("token");
-      const response = await axios.post(API_URL, testimonialData, {
-        headers: {
-          Authorization: `Bearer ${token}`,
-        },
-      });
+      const response = await apiClient.post(
+        "/testimonials",
+        testimonialData,
+        {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        }
+      );
       return response.data;
-    } catch (error) {
-      return rejectWithValue(error.response.data);
+    } catch (error: any) {
+      return rejectWithValue(error.response?.data?.message || error.message);
     }
   }
 );
@@ -44,20 +67,24 @@ export const addTestimonial = createAsyncThunk(
 export const updateTestimonial = createAsyncThunk(
   "testimonials/updateTestimonial",
   async (
-    { id, testimonialData }: { id: string; testimonialData: TestimonialData },
+    { id, testimonialData }: { id: string; testimonialData: Partial<TestimonialData> },
     { getState, rejectWithValue }
   ) => {
     try {
       const token =
         (getState() as any).auth.token || localStorage.getItem("token");
-      const response = await axios.put(`${API_URL}/${id}`, testimonialData, {
-        headers: {
-          Authorization: `Bearer ${token}`,
-        },
-      });
+      const response = await apiClient.put(
+        `/testimonials/${id}`,
+        testimonialData,
+        {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        }
+      );
       return response.data;
-    } catch (error) {
-      return rejectWithValue(error.response.data);
+    } catch (error: any) {
+      return rejectWithValue(error.response?.data?.message || error.message);
     }
   }
 );
@@ -68,47 +95,41 @@ export const deleteTestimonial = createAsyncThunk(
     try {
       const token =
         (getState() as any).auth.token || localStorage.getItem("token");
-      await axios.delete(`${API_URL}/${id}`, {
+      await apiClient.delete(`/testimonials/${id}`, {
         headers: {
           Authorization: `Bearer ${token}`,
         },
       });
       return id;
-    } catch (error) {
-      return rejectWithValue(error.response.data);
+    } catch (error: any) {
+      return rejectWithValue(error.response?.data?.message || error.message);
     }
   }
 );
 
 const testimonialsSlice = createSlice({
   name: "testimonials",
-  initialState: {
-    testimonials: [],
-    isLoading: false,
-    isError: false,
-    message: "",
-  },
+  initialState,
   reducers: {},
   extraReducers: (builder) => {
     builder
       .addCase(fetchTestimonials.pending, (state) => {
-        state.isLoading = true;
+        state.status = "loading";
       })
       .addCase(fetchTestimonials.fulfilled, (state, action) => {
-        state.isLoading = false;
+        state.status = "succeeded";
         state.testimonials = action.payload;
       })
       .addCase(fetchTestimonials.rejected, (state, action) => {
-        state.isLoading = false;
-        state.isError = true;
-        state.message = action.payload as string;
+        state.status = "failed";
+        state.error = action.payload as string;
       })
       .addCase(addTestimonial.fulfilled, (state, action) => {
         state.testimonials.push(action.payload);
       })
       .addCase(updateTestimonial.fulfilled, (state, action) => {
         const index = state.testimonials.findIndex(
-          (t: any) => t._id === action.payload._id
+          (t) => t._id === action.payload._id
         );
         if (index !== -1) {
           state.testimonials[index] = action.payload;
@@ -116,7 +137,7 @@ const testimonialsSlice = createSlice({
       })
       .addCase(deleteTestimonial.fulfilled, (state, action) => {
         state.testimonials = state.testimonials.filter(
-          (t: any) => t._id !== action.payload
+          (t) => t._id !== action.payload
         );
       });
   },

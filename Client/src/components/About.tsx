@@ -16,7 +16,42 @@ export const About = () => {
     }
   }, [status, dispatch]);
 
-  const timelineItems = Array.isArray(timeline) ? timeline : [];
+  const staticTimelineData = [
+    {
+      _id: 'static-1',
+      title: 'B.Sc in Computer Science',
+      description: 'Graduated with a solid foundation in computer science principles, algorithms, and software development.',
+      year: '2020-2023',
+      type: 'education',
+      achievements: ['Dean\'s List for Academic Excellence', 'Published a research paper on AI', 'Led the college coding club'],
+    },
+    {
+      _id: 'static-2',
+      title: 'Freelance Web Developer',
+      description: 'Started my journey as a freelance developer, working with clients to build modern and responsive websites.',
+      year: '2023-Present',
+      type: 'work',
+      achievements: ['Delivered 5+ client projects successfully', 'Achieved 100% client satisfaction', 'Specialized in the MERN stack'],
+    },
+    {
+      _id: 'static-3',
+      title: 'MERN Stack Certification',
+      description: 'Completed an intensive certification program focused on MongoDB, Express.js, React, and Node.js.',
+      year: '2022',
+      type: 'education',
+      achievements: ['Built a full-stack e-commerce application', 'Mastered REST API design and implementation', 'Gained expertise in state management with Redux'],
+    },
+    {
+      _id: 'static-4',
+      title: 'UI/UX Design Workshop',
+      description: 'Participated in a workshop to enhance skills in user interface and user experience design principles.',
+      year: '2021',
+      type: 'education',
+      achievements: ['Learned Figma and Adobe XD for prototyping', 'Applied user-centered design methodologies', 'Improved visual design and layout skills'],
+    }
+  ];
+
+  const timelineItems = status === 'succeeded' && Array.isArray(timeline) && timeline.length > 0 ? timeline : staticTimelineData;
   const mainTimeline = timelineItems.slice(0, 4);
   const additionalTimeline = timelineItems.slice(4);
 

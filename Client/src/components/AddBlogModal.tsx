@@ -16,36 +16,29 @@ interface AddBlogModalProps {
 export const AddBlogModal = ({ isOpen, blog, onClose }: AddBlogModalProps) => {
   const [title, setTitle] = useState('');
   const [content, setContent] = useState('');
-  const [image, setImage] = useState<File | null>(null);
-  const [category, setCategory] = useState('');
+  const [image, setImage] = useState('');
   const dispatch = useDispatch<AppDispatch>();
 
   useEffect(() => {
     if (blog) {
       setTitle(blog.title);
       setContent(blog.content);
-      setCategory(blog.category || '');
+      setImage(blog.image);
     } else {
       setTitle('');
       setContent('');
-      setCategory('');
+      setImage('');
     }
   }, [blog]);
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
-    const formData = new FormData();
-    formData.append('title', title);
-    formData.append('content', content);
-    formData.append('category', category);
-    if (image) {
-      formData.append('image', image);
-    }
+    const blogData = { title, content, image };
 
     if (blog) {
-      dispatch(updateBlog({ id: blog._id, blogData: formData }));
+      dispatch(updateBlog({ id: blog._id, blogData }));
     } else {
-      dispatch(addBlog(formData));
+      dispatch(addBlog(blogData));
     }
     onClose();
   };
@@ -59,8 +52,7 @@ export const AddBlogModal = ({ isOpen, blog, onClose }: AddBlogModalProps) => {
         <form onSubmit={handleSubmit} className="space-y-4">
           <Input placeholder="Title" value={title} onChange={(e) => setTitle(e.target.value)} required />
           <Textarea placeholder="Content" value={content} onChange={(e) => setContent(e.target.value)} required />
-          <Input placeholder="Category" value={category} onChange={(e) => setCategory(e.target.value)} required />
-          <Input type="file" onChange={(e) => setImage(e.target.files ? e.target.files[0] : null)} />
+          <Input placeholder="Image URL" value={image} onChange={(e) => setImage(e.target.value)} required />
           <Button type="submit">{blog ? 'Update Blog' : 'Add Blog'}</Button>
         </form>
       </DialogContent>
