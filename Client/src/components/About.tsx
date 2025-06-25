@@ -1,0 +1,205 @@
+
+import { Card, CardContent } from "@/components/ui/card";
+import { Badge } from "@/components/ui/badge";
+import { Calendar, Award, Code, Database, Globe, Users } from "lucide-react";
+
+export const About = () => {
+  const skills = [
+    { 
+      category: "Frontend", 
+      items: ["HTML5", "CSS3", "JavaScript ES6+", "React.js", "Tailwind CSS", "Bootstrap"],
+      icon: Globe,
+      color: "from-blue-500 to-cyan-500"
+    },
+    { 
+      category: "Backend", 
+      items: ["Node.js", "Express.js", "RESTful APIs", "JWT Authentication"],
+      icon: Code,
+      color: "from-green-500 to-emerald-500"
+    },
+    { 
+      category: "Database", 
+      items: ["MongoDB", "MySQL", "Mongoose ODM", "Database Design"],
+      icon: Database,
+      color: "from-purple-500 to-violet-500"
+    },
+    { 
+      category: "Tools & Others", 
+      items: ["Git & GitHub", "LaTeX", "VS Code", "Postman", "npm/yarn"],
+      icon: Users,
+      color: "from-orange-500 to-red-500"
+    },
+  ];
+
+  const timeline = [
+    {
+      year: "2024",
+      title: "Freelance Full Stack Developer",
+      description: "Providing comprehensive web development services to clients worldwide, specializing in MERN stack applications with modern UI/UX design.",
+      type: "work",
+      achievements: ["2+ successful projects", "100% client satisfaction", "5-star average rating"]
+    },
+    {
+      year: "2023",
+      title: "Backend Development Internship",
+      description: "Gained extensive hands-on experience in server-side development, database management, and API development using Node.js and Express.js.",
+      type: "work",
+      achievements: ["Built 5+ REST APIs", "Optimized database queries", "Reduced response time by 40%"]
+    },
+    {
+      year: "2022",
+      title: "Computer Science Education",
+      description: "Focused on software development fundamentals, algorithms, data structures, and modern web technologies with emphasis on practical application.",
+      type: "education",
+      achievements: ["Top 10% of class", "Led 3 team projects", "Excellence in Web Development"]
+    }
+  ];
+
+  const stats = [
+    { number: "5+", label: "Projects Completed", icon: Award },
+    { number: "100%", label: "Client Satisfaction", icon: Users },
+    { number: "2+", label: "Years Experience", icon: Calendar },
+    { number: "24/7", label: "Support Available", icon: Globe },
+  ];
+
+  return (
+    <section id="about" className="py-20 bg-gradient-to-br from-slate-50 via-blue-50 to-indigo-50">
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        <div className="text-center mb-20">
+          <div className="inline-block px-4 py-2 bg-blue-100 text-blue-800 rounded-full text-sm font-medium mb-4">
+            ABOUT ME
+          </div>
+          <h2 className="text-4xl md:text-6xl font-bold mb-6 bg-gradient-to-r from-gray-900 via-blue-900 to-purple-900 bg-clip-text text-transparent">
+            Passionate Developer
+          </h2>
+          <p className="text-xl text-gray-600 max-w-3xl mx-auto leading-relaxed">
+            Transforming ideas into powerful digital solutions with clean code and innovative design.
+          </p>
+        </div>
+
+        {/* Stats Section */}
+        <div className="grid sm:grid-cols-2 lg:grid-cols-4 gap-6 mb-20">
+          {stats.map((stat, index) => (
+            <Card key={index} className="bg-white/80 backdrop-blur-sm border-0 shadow-lg hover:shadow-xl transition-all duration-300 hover:-translate-y-2">
+              <CardContent className="p-6 text-center">
+                <div className="w-12 h-12 bg-gradient-to-r from-blue-600 to-purple-600 rounded-full flex items-center justify-center mx-auto mb-4">
+                  <stat.icon className="w-6 h-6 text-white" />
+                </div>
+                <div className="text-3xl font-bold text-gray-900 mb-2">{stat.number}</div>
+                <div className="text-gray-600 font-medium">{stat.label}</div>
+              </CardContent>
+            </Card>
+          ))}
+        </div>
+
+        <div className="grid lg:grid-cols-2 gap-16 items-start">
+          {/* Bio Section */}
+          <div className="space-y-8">
+            <Card className="bg-white/80 backdrop-blur-sm border-0 shadow-2xl">
+              <CardContent className="p-8">
+                <h3 className="text-3xl font-bold mb-6 text-gray-900">My Journey</h3>
+                <div className="space-y-6">
+                  <p className="text-gray-600 leading-relaxed text-lg">
+                    As a dedicated <span className="font-semibold text-blue-600">full stack developer</span>, I specialize in creating robust web applications 
+                    using the MERN stack. My journey in web development has been driven by a passion for 
+                    clean code, exceptional user experiences, and solving complex technical challenges.
+                  </p>
+                  <p className="text-gray-600 leading-relaxed text-lg">
+                    I have successfully delivered projects for various clients, from <span className="font-semibold text-purple-600">startups to established businesses</span>, 
+                    helping them build scalable web solutions. My expertise extends beyond just coding - 
+                    I also provide comprehensive technical documentation using LaTeX and offer 
+                    expert debugging and maintenance solutions.
+                  </p>
+                  <div className="bg-gradient-to-r from-blue-50 to-purple-50 p-6 rounded-2xl border border-blue-100">
+                    <h4 className="font-semibold text-gray-900 mb-3">What drives me:</h4>
+                    <ul className="space-y-2 text-gray-600">
+                      <li className="flex items-center">
+                        <div className="w-2 h-2 bg-blue-500 rounded-full mr-3"></div>
+                        Creating impactful digital solutions
+                      </li>
+                      <li className="flex items-center">
+                        <div className="w-2 h-2 bg-purple-500 rounded-full mr-3"></div>
+                        Continuous learning and innovation
+                      </li>
+                      <li className="flex items-center">
+                        <div className="w-2 h-2 bg-green-500 rounded-full mr-3"></div>
+                        Building long-term client relationships
+                      </li>
+                    </ul>
+                  </div>
+                </div>
+              </CardContent>
+            </Card>
+
+            {/* Skills Grid */}
+            <div className="grid sm:grid-cols-2 gap-6">
+              {skills.map((skillCategory, index) => (
+                <Card key={index} className="bg-white/80 backdrop-blur-sm border-0 shadow-lg hover:shadow-xl transition-all duration-300 hover:-translate-y-1 group">
+                  <CardContent className="p-6">
+                    <div className="flex items-center mb-4">
+                      <div className={`w-10 h-10 bg-gradient-to-r ${skillCategory.color} rounded-lg flex items-center justify-center mr-3 group-hover:scale-110 transition-transform duration-300`}>
+                        <skillCategory.icon className="w-5 h-5 text-white" />
+                      </div>
+                      <h4 className="font-bold text-lg text-gray-900">{skillCategory.category}</h4>
+                    </div>
+                    <div className="flex flex-wrap gap-2">
+                      {skillCategory.items.map((skill, skillIndex) => (
+                        <Badge key={skillIndex} variant="secondary" className="bg-gray-100 text-gray-700 hover:bg-gray-200 transition-colors duration-200">
+                          {skill}
+                        </Badge>
+                      ))}
+                    </div>
+                  </CardContent>
+                </Card>
+              ))}
+            </div>
+          </div>
+
+          {/* Timeline Section */}
+          <div className="space-y-8">
+            <h3 className="text-3xl font-bold mb-8 text-gray-900">Experience & Education</h3>
+            <div className="space-y-8">
+              {timeline.map((item, index) => (
+                <div key={index} className="relative">
+                  <div className="flex items-start">
+                    <div className="flex-shrink-0 relative">
+                      <div className="w-4 h-4 bg-gradient-to-r from-blue-600 to-purple-600 rounded-full"></div>
+                      {index < timeline.length - 1 && (
+                        <div className="absolute top-4 left-2 w-0.5 h-20 bg-gradient-to-b from-blue-600 to-purple-600 opacity-30"></div>
+                      )}
+                    </div>
+                    <Card className="ml-6 flex-1 bg-white/80 backdrop-blur-sm border-0 shadow-lg hover:shadow-xl transition-all duration-300 hover:-translate-y-1">
+                      <CardContent className="p-6">
+                        <div className="flex items-center justify-between mb-3">
+                          <span className="text-sm font-bold text-blue-600 bg-blue-50 px-3 py-1 rounded-full">
+                            {item.year}
+                          </span>
+                          <Badge variant={item.type === 'work' ? 'default' : 'secondary'} className="capitalize">
+                            {item.type}
+                          </Badge>
+                        </div>
+                        <h4 className="font-bold text-xl mb-3 text-gray-900">{item.title}</h4>
+                        <p className="text-gray-600 mb-4 leading-relaxed">{item.description}</p>
+                        <div className="space-y-2">
+                          <h5 className="font-semibold text-gray-800">Key Achievements:</h5>
+                          <ul className="space-y-1">
+                            {item.achievements.map((achievement, achIndex) => (
+                              <li key={achIndex} className="flex items-center text-sm text-gray-600">
+                                <div className="w-1.5 h-1.5 bg-green-500 rounded-full mr-3"></div>
+                                {achievement}
+                              </li>
+                            ))}
+                          </ul>
+                        </div>
+                      </CardContent>
+                    </Card>
+                  </div>
+                </div>
+              ))}
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+  );
+};
