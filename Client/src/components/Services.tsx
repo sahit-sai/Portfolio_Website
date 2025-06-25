@@ -11,7 +11,7 @@ export const Services = () => {
       title: "Website Development",
       description: "Complete frontend and backend web development using MERN stack, creating responsive and scalable web applications.",
       features: ["React.js Frontend", "Node.js Backend", "MongoDB Database", "Responsive Design"],
-      price: "Starting from $500",
+      price: "Starting from ₹5,000",
       deliveryTime: "7-14 days"
     },
     {
@@ -19,7 +19,7 @@ export const Services = () => {
       title: "Application Development", 
       description: "Full stack application development with modern technologies, focusing on user experience and performance.",
       features: ["Full Stack Development", "API Integration", "Database Design", "User Authentication"],
-      price: "Starting from $800",
+      price: "Starting from ₹15,000",
       deliveryTime: "10-21 days"
     },
     {
@@ -27,7 +27,7 @@ export const Services = () => {
       title: "CRM Software Maintenance",
       description: "Comprehensive maintenance and enhancement of Customer Relationship Management systems for optimal performance.",
       features: ["System Updates", "Performance Optimization", "Feature Enhancement", "Data Migration"],
-      price: "Starting from $300",
+      price: "Starting from ₹5,000",
       deliveryTime: "3-7 days"
     },
     {
@@ -35,7 +35,7 @@ export const Services = () => {
       title: "Error Fixing & Debugging",
       description: "Expert debugging services to identify and resolve technical issues in existing applications quickly and efficiently.",
       features: ["Bug Identification", "Code Review", "Performance Issues", "Quick Turnaround"],
-      price: "Starting from $150",
+      price: "Starting from ₹2,000",
       deliveryTime: "1-3 days"
     },
     {
@@ -43,7 +43,7 @@ export const Services = () => {
       title: "Technical Documentation",
       description: "Professional technical documentation services using LaTeX for clear, well-structured, and professional documents.",
       features: ["LaTeX Expertise", "API Documentation", "User Manuals", "Technical Reports"],
-      price: "Starting from $200",
+      price: "Starting from ₹600",
       deliveryTime: "3-5 days"
     },
     {
@@ -125,10 +125,12 @@ export const Services = () => {
                 </div>
 
                 {/* CTA Button */}
-                <Button className="w-full bg-gradient-to-r from-blue-600 to-purple-600 hover:from-blue-700 hover:to-purple-700 text-white py-3 rounded-xl font-medium transition-all duration-300 group-hover:shadow-lg">
-                  Get Started
-                  <ArrowRight className="w-4 h-4 ml-2 group-hover:translate-x-1 transition-transform duration-300" />
-                </Button>
+                <a href="https://wa.me/919284769125" target="_blank" rel="noopener noreferrer">
+                  <Button className="w-full bg-gradient-to-r from-blue-600 to-purple-600 hover:from-blue-700 hover:to-purple-700 text-white py-3 rounded-xl font-medium transition-all duration-300 group-hover:shadow-lg">
+                    Get Started
+                    <ArrowRight className="w-4 h-4 ml-2 group-hover:translate-x-1 transition-transform duration-300" />
+                  </Button>
+                </a>
               </div>
 
               {/* Decorative elements */}

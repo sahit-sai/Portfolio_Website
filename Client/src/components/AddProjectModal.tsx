@@ -15,6 +15,7 @@ import { Textarea } from '@/components/ui/textarea';
 import { addProject, updateProject } from '@/redux/slices/projectsSlice';
 import { AppDispatch } from '@/redux/store';
 import { toast } from 'sonner';
+import { FolderOpen, ImageIcon, Link, Github, Tag, Sparkles } from 'lucide-react';
 
 export const AddProjectModal = ({ isOpen, onClose, project }) => {
   const dispatch = useDispatch<AppDispatch>();
@@ -70,42 +71,82 @@ export const AddProjectModal = ({ isOpen, onClose, project }) => {
 
   return (
     <Dialog open={isOpen} onOpenChange={onClose}>
-      <DialogContent className="sm:max-w-[425px]">
-        <DialogHeader>
-          <DialogTitle>{project ? 'Edit Project' : 'Add Project'}</DialogTitle>
-          <DialogDescription>
-            {project ? 'Update the details of your project.' : 'Add a new project to your portfolio.'}
-          </DialogDescription>
-        </DialogHeader>
-        <form onSubmit={handleSubmit}>
-          <div className="grid gap-4 py-4">
-            <div className="grid grid-cols-4 items-center gap-4">
-              <Label htmlFor="title" className="text-right">
-                Title
-              </Label>
-              <Input id="title" value={title} onChange={(e) => setTitle(e.target.value)} className="col-span-3" />
+      <DialogContent className="sm:max-w-[600px] bg-white/95 dark:bg-gray-900/95 backdrop-blur-sm border-0 shadow-2xl">
+        <DialogHeader className="space-y-4 pb-6">
+          <div className="flex items-center gap-3">
+            <div className="p-3 bg-gradient-to-br from-blue-500 to-purple-600 rounded-xl shadow-lg">
+              <FolderOpen className="h-6 w-6 text-white" />
             </div>
-            <div className="grid grid-cols-4 items-center gap-4">
-              <Label htmlFor="description" className="text-right">
+            <div>
+              <DialogTitle className="text-2xl font-bold bg-gradient-to-r from-blue-600 to-purple-600 bg-clip-text text-transparent">
+                {project ? 'Edit Project' : 'Add New Project'}
+              </DialogTitle>
+              <DialogDescription className="text-gray-600 dark:text-gray-400 mt-1">
+                {project ? 'Update the details of your project.' : 'Add a new project to your portfolio.'}
+              </DialogDescription>
+            </div>
+          </div>
+        </DialogHeader>
+
+        <form onSubmit={handleSubmit} className="space-y-6">
+          <div className="grid gap-6">
+            {/* Title */}
+            <div className="space-y-2">
+              <Label htmlFor="title" className="text-sm font-semibold text-gray-700 dark:text-gray-300 flex items-center gap-2">
+                <Sparkles className="h-4 w-4 text-blue-500" />
+                Project Title
+              </Label>
+              <Input
+                id="title"
+                value={title}
+                onChange={(e) => setTitle(e.target.value)}
+                className="h-12 bg-gray-50 dark:bg-gray-800 border-gray-200 dark:border-gray-700 rounded-xl focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all duration-300"
+                placeholder="Enter project title..."
+                required
+              />
+            </div>
+
+            {/* Description */}
+            <div className="space-y-2">
+              <Label htmlFor="description" className="text-sm font-semibold text-gray-700 dark:text-gray-300">
                 Description
               </Label>
-              <Textarea id="description" value={description} onChange={(e) => setDescription(e.target.value)} className="col-span-3" />
+              <Textarea
+                id="description"
+                value={description}
+                onChange={(e) => setDescription(e.target.value)}
+                className="min-h-[100px] bg-gray-50 dark:bg-gray-800 border-gray-200 dark:border-gray-700 rounded-xl focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all duration-300 resize-none"
+                placeholder="Describe your project..."
+                required
+              />
             </div>
-            <div className="grid grid-cols-4 items-center gap-4">
-              <Label htmlFor="image" className="text-right">
+
+            {/* Image URL */}
+            <div className="space-y-2">
+              <Label htmlFor="image" className="text-sm font-semibold text-gray-700 dark:text-gray-300 flex items-center gap-2">
+                <ImageIcon className="h-4 w-4 text-purple-500" />
                 Image URL
               </Label>
-              <Input id="image" value={image} onChange={(e) => setImage(e.target.value)} className="col-span-3" />
+              <Input
+                id="image"
+                value={image}
+                onChange={(e) => setImage(e.target.value)}
+                className="h-12 bg-gray-50 dark:bg-gray-800 border-gray-200 dark:border-gray-700 rounded-xl focus:ring-2 focus:ring-purple-500 focus:border-transparent transition-all duration-300"
+                placeholder="https://example.com/image.jpg"
+              />
             </div>
-            <div className="grid grid-cols-4 items-center gap-4">
-              <Label htmlFor="category" className="text-right">
+
+            {/* Category */}
+            <div className="space-y-2">
+              <Label htmlFor="category" className="text-sm font-semibold text-gray-700 dark:text-gray-300 flex items-center gap-2">
+                <Tag className="h-4 w-4 text-emerald-500" />
                 Category
               </Label>
               <select
                 id="category"
                 value={category}
                 onChange={e => setCategory(e.target.value)}
-                className="col-span-3 border rounded px-2 py-2"
+                className="w-full h-12 bg-gray-50 dark:bg-gray-800 border border-gray-200 dark:border-gray-700 rounded-xl px-4 focus:ring-2 focus:ring-emerald-500 focus:border-transparent transition-all duration-300"
                 required
               >
                 <option value="" disabled>Select category</option>
@@ -118,35 +159,68 @@ export const AddProjectModal = ({ isOpen, onClose, project }) => {
                 <option value="Other">Other</option>
               </select>
             </div>
-            <div className="grid grid-cols-4 items-center gap-4">
-              <Label htmlFor="liveUrl" className="text-right">
-                Live URL
-              </Label>
-              <Input id="liveUrl" value={liveUrl} onChange={(e) => setLiveUrl(e.target.value)} className="col-span-3" />
-            </div>            <div className="grid grid-cols-4 items-center gap-4">
-              <Label htmlFor="githubUrl" className="text-right">
-                GitHub URL
-              </Label>
-              <Input id="githubUrl" value={githubUrl} onChange={(e) => setGithubUrl(e.target.value)} className="col-span-3" />
+
+            {/* URLs */}
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+              <div className="space-y-2">
+                <Label htmlFor="liveUrl" className="text-sm font-semibold text-gray-700 dark:text-gray-300 flex items-center gap-2">
+                  <Link className="h-4 w-4 text-blue-500" />
+                  Live URL
+                </Label>
+                <Input
+                  id="liveUrl"
+                  value={liveUrl}
+                  onChange={(e) => setLiveUrl(e.target.value)}
+                  className="h-12 bg-gray-50 dark:bg-gray-800 border-gray-200 dark:border-gray-700 rounded-xl focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all duration-300"
+                  placeholder="https://project-demo.com"
+                />
+              </div>
+
+              <div className="space-y-2">
+                <Label htmlFor="githubUrl" className="text-sm font-semibold text-gray-700 dark:text-gray-300 flex items-center gap-2">
+                  <Github className="h-4 w-4 text-gray-700 dark:text-gray-300" />
+                  GitHub URL
+                </Label>
+                <Input
+                  id="githubUrl"
+                  value={githubUrl}
+                  onChange={(e) => setGithubUrl(e.target.value)}
+                  className="h-12 bg-gray-50 dark:bg-gray-800 border-gray-200 dark:border-gray-700 rounded-xl focus:ring-2 focus:ring-gray-500 focus:border-transparent transition-all duration-300"
+                  placeholder="https://github.com/user/repo"
+                />
+              </div>
             </div>
-            <div className="grid grid-cols-4 items-center gap-4">
-              <Label htmlFor="technologies" className="text-right">
+
+            {/* Technologies */}
+            <div className="space-y-2">
+              <Label htmlFor="technologies" className="text-sm font-semibold text-gray-700 dark:text-gray-300">
                 Technologies
               </Label>
               <Input
                 id="technologies"
                 value={technologies}
                 onChange={(e) => setTechnologies(e.target.value)}
-                className="col-span-3"
+                className="h-12 bg-gray-50 dark:bg-gray-800 border-gray-200 dark:border-gray-700 rounded-xl focus:ring-2 focus:ring-orange-500 focus:border-transparent transition-all duration-300"
                 placeholder="React, Node.js, MongoDB (comma separated)"
               />
             </div>
           </div>
-          <DialogFooter>
-            <Button type="button" variant="outline" onClick={onClose}>
+
+          <DialogFooter className="gap-3 pt-6">
+            <Button
+              type="button"
+              variant="outline"
+              onClick={onClose}
+              className="px-6 py-3 rounded-xl border-2 hover:bg-gray-50 dark:hover:bg-gray-800 transition-all duration-300"
+            >
               Cancel
             </Button>
-            <Button type="submit">Save</Button>
+            <Button
+              type="submit"
+              className="px-6 py-3 bg-gradient-to-r from-blue-500 to-purple-600 hover:from-blue-600 hover:to-purple-700 text-white border-0 rounded-xl shadow-lg hover:shadow-xl transition-all duration-300 hover:scale-105"
+            >
+              {project ? 'Update Project' : 'Create Project'}
+            </Button>
           </DialogFooter>
         </form>
       </DialogContent>
