@@ -1,4 +1,3 @@
-
 import { Button } from "@/components/ui/button";
 import { Code, Smartphone, Settings, Bug, FileText, Globe, ArrowRight, Check } from "lucide-react";
 import { useState } from "react";
@@ -145,9 +144,11 @@ export const Services = () => {
             <p className="text-gray-600 mb-6 max-w-md">
               Don't see exactly what you need? Let's discuss your unique requirements and create a tailored solution.
             </p>
-            <Button className="bg-gradient-to-r from-blue-600 to-purple-600 hover:from-blue-700 hover:to-purple-700 text-white px-8 py-3 rounded-xl font-medium">
-              Let's Talk
-            </Button>
+            <a href="https://wa.me/919284769125" target="_blank" rel="noopener noreferrer">
+              <Button className="bg-gradient-to-r from-blue-600 to-purple-600 hover:from-blue-700 hover:to-purple-700 text-white px-8 py-3 rounded-xl font-medium">
+                Let's Talk
+              </Button>
+            </a>
           </div>
         </div>
       </div>
