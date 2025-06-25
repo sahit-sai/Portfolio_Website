@@ -8,6 +8,7 @@ import testimonialRoutes from "./src/api/testimonials/testimonial.routes.js";
 import contactRoutes from "./src/api/contact/contact.routes.js";
 import blogRoutes from "./src/api/blogs/blog.routes.js";
 import subscriberRoutes from "./src/api/subscribers/subscriber.routes.js";
+import timelineRoutes from "./src/api/timeline/timeline.routes.js";
 import path from "path";
 import { fileURLToPath } from "url";
 
@@ -38,6 +39,7 @@ app.use("/api/testimonials", testimonialRoutes);
 app.use("/api/contact", contactRoutes);
 app.use("/api/blogs", blogRoutes);
 app.use("/api/subscribe", subscriberRoutes);
+app.use("/api/timeline", timelineRoutes);
 
 // Error handling middleware
 app.use((err, req, res, next) => {

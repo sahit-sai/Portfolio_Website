@@ -1,58 +1,50 @@
-
+import React, { useEffect } from 'react';
+import { useDispatch, useSelector } from 'react-redux';
+import { RootState, AppDispatch } from '@/redux/store';
+import { fetchTimeline } from '@/redux/slices/timelineSlice';
 import { Card, CardContent } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { Calendar, Award, Code, Database, Globe, Users } from "lucide-react";
 
 export const About = () => {
+  const dispatch: AppDispatch = useDispatch();
+  const { items: timeline, status } = useSelector((state: RootState) => state.timeline);
+
+  useEffect(() => {
+    if (status === 'idle') {
+      dispatch(fetchTimeline());
+    }
+  }, [status, dispatch]);
+
+  const timelineItems = Array.isArray(timeline) ? timeline : [];
+  const mainTimeline = timelineItems.slice(0, 4);
+  const additionalTimeline = timelineItems.slice(4);
+
   const skills = [
-    { 
-      category: "Frontend", 
+    {
+      category: "Frontend",
       items: ["HTML5", "CSS3", "JavaScript ES6+", "React.js", "Tailwind CSS", "Bootstrap"],
       icon: Globe,
       color: "from-blue-500 to-cyan-500"
     },
-    { 
-      category: "Backend", 
+    {
+      category: "Backend",
       items: ["Node.js", "Express.js", "RESTful APIs", "JWT Authentication"],
       icon: Code,
       color: "from-green-500 to-emerald-500"
     },
-    { 
-      category: "Database", 
+    {
+      category: "Database",
       items: ["MongoDB", "MySQL", "Mongoose ODM", "Database Design"],
       icon: Database,
       color: "from-purple-500 to-violet-500"
     },
-    { 
-      category: "Tools & Others", 
+    {
+      category: "Tools & Others",
       items: ["Git & GitHub", "LaTeX", "VS Code", "Postman", "npm/yarn"],
       icon: Users,
       color: "from-orange-500 to-red-500"
     },
-  ];
-
-  const timeline = [
-    {
-      year: "2024",
-      title: "Freelance Full Stack Developer",
-      description: "Providing comprehensive web development services to clients worldwide, specializing in MERN stack applications with modern UI/UX design.",
-      type: "work",
-      achievements: ["2+ successful projects", "100% client satisfaction", "5-star average rating"]
-    },
-    {
-      year: "2023",
-      title: "Backend Development Internship",
-      description: "Gained extensive hands-on experience in server-side development, database management, and API development using Node.js and Express.js.",
-      type: "work",
-      achievements: ["Built 5+ REST APIs", "Optimized database queries", "Reduced response time by 40%"]
-    },
-    {
-      year: "2022",
-      title: "Computer Science Education",
-      description: "Focused on software development fundamentals, algorithms, data structures, and modern web technologies with emphasis on practical application.",
-      type: "education",
-      achievements: ["Top 10% of class", "Led 3 team projects", "Excellence in Web Development"]
-    }
   ];
 
   const stats = [
@@ -100,14 +92,14 @@ export const About = () => {
                 <h3 className="text-3xl font-bold mb-6 text-gray-900">My Journey</h3>
                 <div className="space-y-6">
                   <p className="text-gray-600 leading-relaxed text-lg">
-                    As a dedicated <span className="font-semibold text-blue-600">full stack developer</span>, I specialize in creating robust web applications 
-                    using the MERN stack. My journey in web development has been driven by a passion for 
+                    As a dedicated <span className="font-semibold text-blue-600">full stack developer</span>, I specialize in creating robust web applications
+                    using the MERN stack. My journey in web development has been driven by a passion for
                     clean code, exceptional user experiences, and solving complex technical challenges.
                   </p>
                   <p className="text-gray-600 leading-relaxed text-lg">
-                    I have successfully delivered projects for various clients, from <span className="font-semibold text-purple-600">startups to established businesses</span>, 
-                    helping them build scalable web solutions. My expertise extends beyond just coding - 
-                    I also provide comprehensive technical documentation using LaTeX and offer 
+                    I have successfully delivered projects for various clients, from <span className="font-semibold text-purple-600">startups to established businesses</span>,
+                    helping them build scalable web solutions. My expertise extends beyond just coding -
+                    I also provide comprehensive technical documentation using LaTeX and offer
                     expert debugging and maintenance solutions.
                   </p>
                   <div className="bg-gradient-to-r from-blue-50 to-purple-50 p-6 rounded-2xl border border-blue-100">
@@ -153,19 +145,62 @@ export const About = () => {
                 </Card>
               ))}
             </div>
+
+            {/* Additional Timeline Items */}
+            {additionalTimeline.length > 0 && (
+              <div className="space-y-8">
+                {additionalTimeline.map((item, index) => (
+                  <div key={index} className="relative">
+                    <div className="flex items-start">
+                      <div className="flex-shrink-0 relative">
+                        <div className="w-4 h-4 bg-gradient-to-r from-blue-600 to-purple-600 rounded-full"></div>
+                        {index < additionalTimeline.length - 1 && (
+                          <div className="absolute top-4 left-2 w-0.5 h-full bg-gradient-to-b from-blue-600 to-purple-600 opacity-30"></div>
+                        )}
+                      </div>
+                      <Card className="ml-6 flex-1 bg-white/80 backdrop-blur-sm border-0 shadow-lg hover:shadow-xl transition-all duration-300 hover:-translate-y-1">
+                        <CardContent className="p-6">
+                          <div className="flex items-center justify-between mb-3">
+                            <span className="text-sm font-bold text-blue-600 bg-blue-50 px-3 py-1 rounded-full">
+                              {item.year}
+                            </span>
+                            <Badge variant={item.type === 'work' ? 'default' : 'secondary'} className="capitalize">
+                              {item.type}
+                            </Badge>
+                          </div>
+                          <h4 className="font-bold text-xl mb-3 text-gray-900">{item.title}</h4>
+                          <p className="text-gray-600 mb-4 leading-relaxed">{item.description}</p>
+                          <div className="space-y-2">
+                            <h5 className="font-semibold text-gray-800">Key Achievements:</h5>
+                            <ul className="space-y-1">
+                              {item.achievements.map((achievement, achIndex) => (
+                                <li key={achIndex} className="flex items-center text-sm text-gray-600">
+                                  <div className="w-1.5 h-1.5 bg-green-500 rounded-full mr-3"></div>
+                                  {achievement}
+                                </li>
+                              ))}
+                            </ul>
+                          </div>
+                        </CardContent>
+                      </Card>
+                    </div>
+                  </div>
+                ))}
+              </div>
+            )}
           </div>
 
           {/* Timeline Section */}
           <div className="space-y-8">
             <h3 className="text-3xl font-bold mb-8 text-gray-900">Experience & Education</h3>
             <div className="space-y-8">
-              {timeline.map((item, index) => (
+              {mainTimeline.map((item, index) => (
                 <div key={index} className="relative">
                   <div className="flex items-start">
                     <div className="flex-shrink-0 relative">
                       <div className="w-4 h-4 bg-gradient-to-r from-blue-600 to-purple-600 rounded-full"></div>
-                      {index < timeline.length - 1 && (
-                        <div className="absolute top-4 left-2 w-0.5 h-20 bg-gradient-to-b from-blue-600 to-purple-600 opacity-30"></div>
+                      {index < mainTimeline.length - 1 && (
+                        <div className="absolute top-4 left-2 w-0.5 h-full bg-gradient-to-b from-blue-600 to-purple-600 opacity-30"></div>
                       )}
                     </div>
                     <Card className="ml-6 flex-1 bg-white/80 backdrop-blur-sm border-0 shadow-lg hover:shadow-xl transition-all duration-300 hover:-translate-y-1">

@@ -8,11 +8,12 @@ import { Dialog, DialogContent, DialogHeader, DialogTitle } from './ui/dialog';
 import { AppDispatch } from '../redux/store';
 
 interface AddBlogModalProps {
+  isOpen: boolean;
   blog?: any;
   onClose: () => void;
 }
 
-export const AddBlogModal = ({ blog, onClose }: AddBlogModalProps) => {
+export const AddBlogModal = ({ isOpen, blog, onClose }: AddBlogModalProps) => {
   const [title, setTitle] = useState('');
   const [content, setContent] = useState('');
   const [image, setImage] = useState<File | null>(null);
@@ -50,7 +51,7 @@ export const AddBlogModal = ({ blog, onClose }: AddBlogModalProps) => {
   };
 
   return (
-    <Dialog open={true} onOpenChange={onClose}>
+    <Dialog open={isOpen} onOpenChange={onClose}>
       <DialogContent>
         <DialogHeader>
           <DialogTitle>{blog ? 'Edit Blog' : 'Add New Blog'}</DialogTitle>

@@ -13,7 +13,8 @@ import {
   Trash2,
   Eye,
   BarChart3,
-  FileText
+  FileText,
+  Calendar
 } from "lucide-react";
 import { AppDispatch, RootState } from "@/redux/store";
 import { getProjects, deleteProject } from "@/redux/slices/projectsSlice";
@@ -22,6 +23,7 @@ import { getBlogs, deleteBlog } from "@/redux/slices/blogsSlice";
 import { AddProjectModal } from "./AddProjectModal";
 import { AddTestimonialModal } from "./AddTestimonialModal";
 import { AddBlogModal } from "./AddBlogModal";
+import TimelineManager from "./TimelineManager";
 import { toast } from "sonner";
 
 export const AdminDashboard = () => {
@@ -40,21 +42,28 @@ export const AdminDashboard = () => {
   const { blogs, isLoading: isLoadingBlogs, isError: isErrorBlogs, message: blogMessage } = useSelector((state: RootState) => state.blogs);
 
   useEffect(() => {
-    if (isErrorProjects) {
-      toast.error(projectMessage);
-    }
-    if (isErrorTestimonials) {
-      toast.error(testimonialMessage);
-    }
-    if (isErrorBlogs) {
-      toast.error(blogMessage);
-    }
-
     dispatch(getProjects());
     dispatch(fetchTestimonials());
     dispatch(getBlogs());
+  }, [dispatch]);
 
-  }, [dispatch, isErrorProjects, isErrorTestimonials, isErrorBlogs, projectMessage, testimonialMessage, blogMessage]);
+  useEffect(() => {
+    if (isErrorProjects) {
+      toast.error(`Projects Error: ${projectMessage}`);
+    }
+  }, [isErrorProjects, projectMessage]);
+
+  useEffect(() => {
+    if (isErrorTestimonials) {
+      toast.error(`Testimonials Error: ${testimonialMessage}`);
+    }
+  }, [isErrorTestimonials, testimonialMessage]);
+
+  useEffect(() => {
+    if (isErrorBlogs) {
+      toast.error(`Blogs Error: ${blogMessage}`);
+    }
+  }, [isErrorBlogs, blogMessage]);
 
   const handleOpenProjectModal = (project = null) => {
     setSelectedProject(project);
@@ -180,11 +189,12 @@ export const AdminDashboard = () => {
           </div>
 
           <Tabs defaultValue="overview" className="w-full">
-            <TabsList className="grid w-full grid-cols-4">
+            <TabsList className="grid w-full grid-cols-5">
               <TabsTrigger value="overview">Overview</TabsTrigger>
               <TabsTrigger value="projects">Projects</TabsTrigger>
               <TabsTrigger value="testimonials">Testimonials</TabsTrigger>
               <TabsTrigger value="blogs">Blogs</TabsTrigger>
+              <TabsTrigger value="timeline">Timeline</TabsTrigger>
             </TabsList>
 
             <TabsContent value="overview" className="space-y-6">
@@ -349,6 +359,10 @@ export const AdminDashboard = () => {
                   ))}
                 </CardContent>
               </Card>
+            </TabsContent>
+
+            <TabsContent value="timeline">
+              <TimelineManager />
             </TabsContent>
           </Tabs>
         </div>

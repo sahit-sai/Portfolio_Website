@@ -2,7 +2,9 @@ import { createSlice, createAsyncThunk, PayloadAction } from "@reduxjs/toolkit";
 import axios from "axios";
 import { Blog } from "../../types"; // Assuming you have a types file
 
-const API_URL = "http://localhost:3001/api/blogs";
+const API_URL = `${
+  import.meta.env.VITE_API_URL || "http://localhost:3001"
+}/api/blogs`;
 
 interface Blog {
   _id: string;
@@ -171,9 +173,10 @@ const blogsSlice = createSlice({
       .addCase(getBlogs.pending, (state) => {
         state.isLoading = true;
       })
-      .addCase(getBlogs.fulfilled, (state, action) => {
+      .addCase(getBlogs.fulfilled, (state, action: PayloadAction<any>) => {
         state.isLoading = false;
-        state.blogs = action.payload;
+        const blogsData = action.payload.blogs || action.payload;
+        state.blogs = Array.isArray(blogsData) ? blogsData : [];
       })
       .addCase(getBlogs.rejected, (state, action) => {
         state.isLoading = false;
@@ -183,9 +186,9 @@ const blogsSlice = createSlice({
       .addCase(getBlogById.pending, (state) => {
         state.isLoading = true;
       })
-      .addCase(getBlogById.fulfilled, (state, action) => {
+      .addCase(getBlogById.fulfilled, (state, action: PayloadAction<any>) => {
         state.isLoading = false;
-        state.currentBlog = action.payload;
+        state.currentBlog = action.payload.blog || action.payload;
         if (state.currentBlog) {
           state.relatedBlogs = state.blogs.filter(
             (blog) =>
@@ -213,19 +216,31 @@ const blogsSlice = createSlice({
       .addCase(deleteBlog.fulfilled, (state, action) => {
         state.blogs = state.blogs.filter((b) => b._id !== action.payload);
       })
-      .addCase(likeBlog.fulfilled, (state, action: PayloadAction<Blog>) => {
+      .addCase(likeBlog.fulfilled, (state, action: PayloadAction<any>) => {
         state.isLoading = false;
-        state.currentBlog = action.payload;
-        const index = state.blogs.findIndex(
-          (b) => b._id === action.payload._id
-        );
-        if (index !== -1) {
-          state.blogs[index] = action.payload;
+        const updatedBlog = action.payload.blog || action.payload;
+        if (updatedBlog) {
+          state.currentBlog = updatedBlog;
+          const index = state.blogs.findIndex(
+            (b) => b._id === updatedBlog._id
+          );
+          if (index !== -1) {
+            state.blogs[index] = updatedBlog;
+          }
         }
       })
-      .addCase(addComment.fulfilled, (state, action: PayloadAction<Blog>) => {
+      .addCase(addComment.fulfilled, (state, action: PayloadAction<any>) => {
         state.isLoading = false;
-        state.currentBlog = action.payload;
+        const updatedBlog = action.payload.blog || action.payload;
+        if (updatedBlog) {
+          state.currentBlog = updatedBlog;
+          const index = state.blogs.findIndex(
+            (b) => b._id === updatedBlog._id
+          );
+          if (index !== -1) {
+            state.blogs[index] = updatedBlog;
+          }
+        }
       });
   },
 });
