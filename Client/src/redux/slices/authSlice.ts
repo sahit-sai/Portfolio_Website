@@ -1,7 +1,8 @@
 import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
 import axios from "axios";
+import { API_BASE_URL } from "../../api";
 
-const API_URL = "http://localhost:3001/api/auth";
+const API_URL = `${API_BASE_URL}/auth`;
 
 // Define the user credentials type
 interface UserCredentials {
@@ -36,7 +37,7 @@ export const registerUser = createAsyncThunk(
 const user = localStorage.getItem("user");
 
 const initialState = {
-  user: user && user !== 'undefined' ? JSON.parse(user) : null,
+  user: user && user !== "undefined" ? JSON.parse(user) : null,
   token: localStorage.getItem("token"),
   isAuthenticated: !!localStorage.getItem("token"),
   loading: false,
