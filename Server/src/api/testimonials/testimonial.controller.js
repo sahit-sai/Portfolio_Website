@@ -30,6 +30,17 @@ export const createTestimonial = async (req, res, next) => {
       image,
     });
 
+    // Debug log for image path and file existence
+    console.log("Testimonial image field:", image);
+    if (image) {
+      const fsPath = path.resolve(
+        "Server",
+        image.replace("/uploads/", "uploads/")
+      );
+      console.log("Expected file system path:", fsPath);
+      console.log("File exists:", fs.existsSync(fsPath));
+    }
+
     const testimonial = await newTestimonial.save();
     res.status(201).json(testimonial);
   } catch (error) {

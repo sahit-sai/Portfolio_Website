@@ -12,6 +12,7 @@ import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogDescription, Di
 import type { AppDispatch } from "../redux/store"
 import { FileText, ImageIcon, Sparkles, PenTool } from "lucide-react"
 import { Label } from "./ui/label"
+import { SERVER_BASE_URL } from "../api"
 
 interface AddBlogModalProps {
   isOpen: boolean
@@ -23,6 +24,7 @@ export const AddBlogModal = ({ isOpen, blog, onClose }: AddBlogModalProps) => {
   const [title, setTitle] = useState("")
   const [content, setContent] = useState("")
   const [image, setImage] = useState("")
+  const [category, setCategory] = useState("")
   const [uploading, setUploading] = useState(false)
   const dispatch = useDispatch<AppDispatch>()
 
@@ -31,10 +33,12 @@ export const AddBlogModal = ({ isOpen, blog, onClose }: AddBlogModalProps) => {
       setTitle(blog.title)
       setContent(blog.content)
       setImage(blog.image)
+      setCategory(blog.category || "")
     } else {
       setTitle("")
       setContent("")
       setImage("")
+      setCategory("")
     }
   }, [blog])
 
@@ -53,7 +57,8 @@ export const AddBlogModal = ({ isOpen, blog, onClose }: AddBlogModalProps) => {
         },
       }
 
-      const { data } = await axios.post("/api/upload", formData, config)
+      // Use SERVER_BASE_URL for correct backend upload URL
+      const { data } = await axios.post(`${SERVER_BASE_URL}/api/upload`, formData, config)
       setImage(data)
       setUploading(false)
     } catch (error) {
@@ -64,8 +69,12 @@ export const AddBlogModal = ({ isOpen, blog, onClose }: AddBlogModalProps) => {
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault()
-    const blogData = { title, content, image }
-
+    const blogData = {
+      title,
+      content,
+      image: image?.replace(SERVER_BASE_URL, ""),
+      category
+    }
     if (blog) {
       dispatch(updateBlog({ id: blog._id, blogData }))
     } else {
@@ -136,27 +145,42 @@ export const AddBlogModal = ({ isOpen, blog, onClose }: AddBlogModalProps) => {
             {/* Image Upload */}
             <div className="space-y-2">
               <Label
-                htmlFor="image"
+                htmlFor="image-file"
                 className="text-sm font-semibold text-gray-700 dark:text-gray-300 flex items-center gap-2"
               >
                 <ImageIcon className="h-4 w-4 text-blue-500" />
                 Featured Image
               </Label>
               <Input
-                id="image"
-                placeholder="Enter image path"
-                value={image}
-                onChange={(e) => setImage(e.target.value)}
-                className="h-12 bg-gray-50 dark:bg-gray-800 border-gray-200 dark:border-gray-700 rounded-xl focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all duration-300"
-                required
-              />
-              <Input
                 id="image-file"
                 type="file"
                 onChange={uploadFileHandler}
                 className="h-12 bg-gray-50 dark:bg-gray-800 border-gray-200 dark:border-gray-700 rounded-xl"
+                required={!blog}
               />
               {uploading && <div>Uploading...</div>}
+              {image && (
+                <img src={image.startsWith('/uploads') ? `${SERVER_BASE_URL}${image}` : image} alt="Blog" className="max-h-40 mt-2 rounded-lg" />
+              )}
+            </div>
+
+            {/* Category */}
+            <div className="space-y-2">
+              <Label
+                htmlFor="category"
+                className="text-sm font-semibold text-gray-700 dark:text-gray-300 flex items-center gap-2"
+              >
+                <span className="inline-block w-4 h-4 bg-blue-400 rounded-full mr-2" />
+                Blog Category
+              </Label>
+              <Input
+                id="category"
+                placeholder="Enter blog category..."
+                value={category}
+                onChange={(e) => setCategory(e.target.value)}
+                className="h-12 bg-gray-50 dark:bg-gray-800 border-gray-200 dark:border-gray-700 rounded-xl focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all duration-300"
+                required
+              />
             </div>
           </div>
 

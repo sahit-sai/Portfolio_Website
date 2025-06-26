@@ -56,14 +56,14 @@ export const getBlogById = createAsyncThunk(
 // Async thunk for adding a blog
 export const addBlog = createAsyncThunk(
   "blogs/addBlog",
-  async (blogData: FormData, { getState, rejectWithValue }) => {
+  async (blogData: any, { getState, rejectWithValue }) => {
     try {
       const token =
         (getState() as any).auth.token || localStorage.getItem("token");
       const response = await apiClient.post("/blogs", blogData, {
         headers: {
           Authorization: `Bearer ${token}`,
-          "Content-Type": "multipart/form-data",
+          "Content-Type": "application/json",
         },
       });
       return response.data;
@@ -77,7 +77,7 @@ export const addBlog = createAsyncThunk(
 export const updateBlog = createAsyncThunk(
   "blogs/updateBlog",
   async (
-    { id, blogData }: { id: string; blogData: FormData },
+    { id, blogData }: { id: string; blogData: any },
     { getState, rejectWithValue }
   ) => {
     try {
@@ -86,7 +86,7 @@ export const updateBlog = createAsyncThunk(
       const response = await apiClient.put(`/blogs/${id}`, blogData, {
         headers: {
           Authorization: `Bearer ${token}`,
-          "Content-Type": "multipart/form-data",
+          "Content-Type": "application/json",
         },
       });
       return response.data;
@@ -135,7 +135,7 @@ export const likeBlog = createAsyncThunk(
   "blogs/likeBlog",
   async (id: string, { rejectWithValue }) => {
     try {
-      const response = await apiClient.post(`/blogs/${id}/like`);
+      const response = await apiClient.put(`/blogs/${id}/like`);
       return response.data;
     } catch (error: any) {
       return rejectWithValue(error.response.data);

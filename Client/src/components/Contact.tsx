@@ -84,15 +84,15 @@ export const Contact = () => {
     {
       icon: Mail,
       title: "Email",
-      value: "krishna.chavan@email.com",
-      link: "mailto:krishna.chavan@email.com",
+      value: "krishnachavan.tech@gmail.com",
+      link: "mailto:krishnachavan.tech@gmail.com",
       description: "Best way to reach me",
     },
     {
       icon: Phone,
       title: "Phone",
-      value: "+91 XXXXX XXXXX",
-      link: "tel:+91XXXXXXXXX",
+      value: "9284769125",
+      link: "tel:9284769125",
       description: "Available 9 AM - 8 PM IST",
     },
     {
@@ -105,15 +105,15 @@ export const Contact = () => {
     {
       icon: Linkedin,
       title: "LinkedIn",
-      value: "krishna-chavan",
-      link: "https://linkedin.com/in/krishna-chavan",
+      value: "Krishna Chavan",
+      link: "https://www.linkedin.com/in/krishna-chavan-882516249",
       description: "Professional network",
     },
     {
       icon: Github,
       title: "GitHub",
-      value: "krishna-chavan",
-      link: "https://github.com/krishna-chavan",
+      value: "Krishnachavan1930",
+      link: "https://github.com/Krishnachavan1930",
       description: "View my code",
     },
   ]

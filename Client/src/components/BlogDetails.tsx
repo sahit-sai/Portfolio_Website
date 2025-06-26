@@ -30,6 +30,7 @@ import {
   Send,
 } from "lucide-react"
 import { Comment, Blog } from "../types"
+import { SERVER_BASE_URL } from "../api"
 
 const BlogDetail = () => {
   const { id } = useParams<{ id: string }>()
@@ -308,7 +309,7 @@ const BlogDetail = () => {
             {/* Featured Image */}
             <div className="relative rounded-2xl overflow-hidden shadow-2xl mb-12">
               <img
-                src={`http://localhost:3001/uploads/blogs/${currentBlog.image}`}
+                src={currentBlog.image?.startsWith("/uploads") ? `${SERVER_BASE_URL}${currentBlog.image}` : currentBlog.image}
                 alt={currentBlog.title}
                 className="w-full h-64 md:h-96 object-cover"
                 onError={(e) => {

@@ -166,10 +166,14 @@ const Blogs: React.FC = () => {
   const regularBlogs = blogsToRender.filter((blog: Blog) => !blog.featured)
 
   const getImageUrl = (image: string) => {
-    if (isError) {
-      return image
+    if (!image) return "/placeholder.svg";
+    if (image.startsWith("/uploads")) {
+      return `${SERVER_BASE_URL}${image}`;
     }
-    return `${apiClient.defaults.baseURL}/uploads/blogs/${image}`
+    if (image.startsWith("http")) {
+      return image;
+    }
+    return image;
   }
 
   if (isLoading) {
