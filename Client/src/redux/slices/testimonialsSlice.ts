@@ -44,7 +44,7 @@ export const fetchTestimonials = createAsyncThunk(
 
 export const addTestimonial = createAsyncThunk(
   "testimonials/addTestimonial",
-  async (testimonialData: TestimonialData, { getState, rejectWithValue }) => {
+  async (testimonialData: FormData, { getState, rejectWithValue }) => {
     try {
       const token =
         (getState() as any).auth.token || localStorage.getItem("token");
@@ -54,6 +54,7 @@ export const addTestimonial = createAsyncThunk(
         {
           headers: {
             Authorization: `Bearer ${token}`,
+            "Content-Type": "multipart/form-data",
           },
         }
       );
@@ -67,7 +68,7 @@ export const addTestimonial = createAsyncThunk(
 export const updateTestimonial = createAsyncThunk(
   "testimonials/updateTestimonial",
   async (
-    { id, testimonialData }: { id: string; testimonialData: Partial<TestimonialData> },
+    { id, testimonialData }: { id: string; testimonialData: FormData },
     { getState, rejectWithValue }
   ) => {
     try {
@@ -79,6 +80,7 @@ export const updateTestimonial = createAsyncThunk(
         {
           headers: {
             Authorization: `Bearer ${token}`,
+            "Content-Type": "multipart/form-data",
           },
         }
       );

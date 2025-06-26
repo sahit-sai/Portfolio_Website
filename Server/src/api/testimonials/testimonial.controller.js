@@ -1,5 +1,6 @@
 import Testimonial from "./testimonial.model.js";
 import fs from "fs";
+import path from "path";
 
 // @desc    Get all testimonials
 // @route   GET /api/testimonials
@@ -56,7 +57,12 @@ export const updateTestimonial = async (req, res, next) => {
       image = `/uploads/testimonials/${req.file.filename}`;
       // And delete the old image from the filesystem
       if (testimonial.image) {
-        const oldImagePath = `.${testimonial.image}`;
+        const oldImagePath = path.resolve(
+          "Server",
+          "uploads",
+          "testimonials",
+          path.basename(testimonial.image)
+        );
         if (fs.existsSync(oldImagePath)) {
           fs.unlinkSync(oldImagePath);
         }
@@ -90,7 +96,12 @@ export const deleteTestimonial = async (req, res, next) => {
 
     // Delete the image from the filesystem
     if (testimonial.image) {
-      const imagePath = `.${testimonial.image}`;
+      const imagePath = path.resolve(
+        "Server",
+        "uploads",
+        "testimonials",
+        path.basename(testimonial.image)
+      );
       if (fs.existsSync(imagePath)) {
         fs.unlinkSync(imagePath);
       }

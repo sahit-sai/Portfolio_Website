@@ -9,6 +9,7 @@ import contactRoutes from "./src/api/contact/contact.routes.js";
 import blogRoutes from "./src/api/blogs/blog.routes.js";
 import subscriberRoutes from "./src/api/subscribers/subscriber.routes.js";
 import timelineRoutes from "./src/api/timeline/timeline.routes.js";
+import uploadRoutes from "./src/api/upload/upload.routes.js";
 import path from "path";
 import { fileURLToPath } from "url";
 
@@ -24,7 +25,7 @@ app.use(express.json());
 // Static folder for uploads
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
-app.use("/uploads", express.static(path.join(__dirname, "./uploads")));
+app.use("/uploads", express.static(path.join(__dirname, "uploads")));
 
 // Request Logger Middleware
 app.use((req, res, next) => {
@@ -40,6 +41,7 @@ app.use("/api/contact", contactRoutes);
 app.use("/api/blogs", blogRoutes);
 app.use("/api/subscribe", subscriberRoutes);
 app.use("/api/timeline", timelineRoutes);
+app.use("/api/upload", uploadRoutes);
 
 // Error handling middleware
 app.use((err, req, res, next) => {

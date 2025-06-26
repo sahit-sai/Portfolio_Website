@@ -56,13 +56,14 @@ export const getBlogById = createAsyncThunk(
 // Async thunk for adding a blog
 export const addBlog = createAsyncThunk(
   "blogs/addBlog",
-  async (blogData: { title: string; content: string; image: string }, { getState, rejectWithValue }) => {
+  async (blogData: FormData, { getState, rejectWithValue }) => {
     try {
       const token =
         (getState() as any).auth.token || localStorage.getItem("token");
       const response = await apiClient.post("/blogs", blogData, {
         headers: {
           Authorization: `Bearer ${token}`,
+          "Content-Type": "multipart/form-data",
         },
       });
       return response.data;
@@ -76,7 +77,7 @@ export const addBlog = createAsyncThunk(
 export const updateBlog = createAsyncThunk(
   "blogs/updateBlog",
   async (
-    { id, blogData }: { id: string; blogData: { title: string; content: string; image: string } },
+    { id, blogData }: { id: string; blogData: FormData },
     { getState, rejectWithValue }
   ) => {
     try {
@@ -85,6 +86,7 @@ export const updateBlog = createAsyncThunk(
       const response = await apiClient.put(`/blogs/${id}`, blogData, {
         headers: {
           Authorization: `Bearer ${token}`,
+          "Content-Type": "multipart/form-data",
         },
       });
       return response.data;
@@ -198,63 +200,49 @@ const blogsSlice = createSlice({
       .addCase(getBlogById.pending, (state) => {
         state.isLoading = true;
       })
-      .addCase(getBlogById.fulfilled, (state, action: PayloadAction<any>) => {
+      .addCase(getBlogById.fulfilled, (state, action: PayloadAction<Blog>) => {
         state.isLoading = false;
-        state.currentBlog = action.payload.blog || action.payload;
-        if (state.currentBlog) {
-          state.relatedBlogs = state.blogs.filter(
-            (blog) =>
-              blog.category === state.currentBlog?.category &&
-              blog._id !== state.currentBlog?._id
-          );
-        }
+        state.currentBlog = action.payload;
       })
       .addCase(getBlogById.rejected, (state, action) => {
         state.isLoading = false;
         state.isError = true;
         state.message = action.payload as string;
       })
-      .addCase(addBlog.fulfilled, (state, action) => {
+      .addCase(addBlog.fulfilled, (state, action: PayloadAction<Blog>) => {
+        state.isLoading = false;
         state.blogs.push(action.payload);
       })
-      .addCase(updateBlog.fulfilled, (state, action) => {
+      .addCase(updateBlog.fulfilled, (state, action: PayloadAction<Blog>) => {
+        state.isLoading = false;
         const index = state.blogs.findIndex(
-          (b) => b._id === action.payload._id
+          (blog) => blog._id === action.payload._id
         );
         if (index !== -1) {
           state.blogs[index] = action.payload;
         }
-      })
-      .addCase(deleteBlog.fulfilled, (state, action) => {
-        state.blogs = state.blogs.filter((b) => b._id !== action.payload);
-      })
-      .addCase(likeBlog.fulfilled, (state, action: PayloadAction<any>) => {
-        state.isLoading = false;
-        const updatedBlog = action.payload.blog || action.payload;
-        if (updatedBlog) {
-          state.currentBlog = updatedBlog;
-          const index = state.blogs.findIndex((b) => b._id === updatedBlog._id);
-          if (index !== -1) {
-            state.blogs[index] = updatedBlog;
-          }
+        if (state.currentBlog?._id === action.payload._id) {
+          state.currentBlog = action.payload;
         }
       })
-      .addCase(
-        getRelatedBlogs.fulfilled,
-        (state, action: PayloadAction<any>) => {
-          state.isLoading = false;
-          state.relatedBlogs = action.payload.blogs || action.payload;
-        }
-      )
-      .addCase(addComment.fulfilled, (state, action: PayloadAction<any>) => {
+      .addCase(deleteBlog.fulfilled, (state, action: PayloadAction<string>) => {
         state.isLoading = false;
-        const updatedBlog = action.payload.blog || action.payload;
-        if (updatedBlog) {
-          state.currentBlog = updatedBlog;
-          const index = state.blogs.findIndex((b) => b._id === updatedBlog._id);
-          if (index !== -1) {
-            state.blogs[index] = updatedBlog;
-          }
+        state.blogs = state.blogs.filter((blog) => blog._id !== action.payload);
+      })
+      .addCase(likeBlog.fulfilled, (state, action: PayloadAction<Blog>) => {
+        const index = state.blogs.findIndex(
+          (blog) => blog._id === action.payload._id
+        );
+        if (index !== -1) {
+          state.blogs[index] = action.payload;
+        }
+        if (state.currentBlog?._id === action.payload._id) {
+          state.currentBlog = action.payload;
+        }
+      })
+      .addCase(addComment.fulfilled, (state, action: PayloadAction<Blog>) => {
+        if (state.currentBlog?._id === action.payload._id) {
+          state.currentBlog = action.payload;
         }
       });
   },

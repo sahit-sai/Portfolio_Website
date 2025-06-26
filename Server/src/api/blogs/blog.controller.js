@@ -1,6 +1,7 @@
 import Blog from "./blog.model.js";
 import asyncHandler from "express-async-handler";
 import mongoose from "mongoose";
+import { sendMail } from "../../utils/emailService.js";
 
 // @desc    Get all blog posts
 // @route   GET /api/blogs
@@ -127,8 +128,20 @@ export const addCommentToBlog = asyncHandler(async (req, res) => {
     };
 
     blog.comments.push(comment);
-
     const updatedBlog = await blog.save();
+
+    // Send email notification to admin
+    try {
+      await sendMail({
+        to: process.env.EMAIL_USER,
+        subject: `New Comment on Blog: ${blog.title}`,
+        text: `A new comment was posted by ${author} on your blog "${blog.title}":\n\n${content}`,
+        html: `<p>A new comment was posted by <strong>${author}</strong> on your blog <strong>${blog.title}</strong>:</p><p>${content}</p>`
+      });
+    } catch (emailError) {
+      console.error('Error sending comment notification email:', emailError);
+    }
+
     res.status(201).json(updatedBlog);
   } else {
     res.status(404);

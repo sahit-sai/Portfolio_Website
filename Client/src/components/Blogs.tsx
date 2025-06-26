@@ -10,7 +10,7 @@ import { Badge } from "./ui/badge"
 import { Button } from "./ui/button"
 import { Calendar, Clock, ArrowRight, User, Eye, Heart, Share2, Bookmark, TrendingUp, Star, Zap } from "lucide-react"
 import { Link } from "react-router-dom"
-import apiClient from "../api"
+import apiClient, { SERVER_BASE_URL } from "../api"
 
 interface Blog {
   _id: string
@@ -33,7 +33,7 @@ const staticBlogs: Blog[] = [
     _id: 'static-1',
     title: 'The Ultimate Guide to Modern Web Development',
     content: 'Discover the latest trends and technologies in web development. This guide covers everything from frontend frameworks like React to backend solutions with Node.js. Perfect for both beginners and experienced developers looking to stay ahead of the curve.',
-    image: 'data:image/webp;base64,UklGRh4BAABXRUJQVlA4IBIBAACQHgCdASraAQEBPp1OpE4lpCOiICgAsBOJaW7hd2EbQAnsA99snIe+2TkPfbJyHvtk5D32ych77ZOQ99snIe+2TkPfbJyHvtk5D32ych77ZOQ99snIe+2TkPfbJyHvtk5D32ych77ZOQ99snIe+2TkPfbJyHvtk5D32ych77ZOQ99snIe+2TkPfbJyHvtk5D32ych77ZOQ99snIe+2TkPfbJyHvtk5D32ych77ZOQ99snIe+2TkPfbJyHvtk5D32ych77ZOQ99snIe+2TkPfbJyHvtk5D32ych77ZOQ99snIe+2TkPfbJyHvtk5D32ych77ZOQ99snIe+2TkN4AP7/1hgAAAAAAAAAAAAAAAAAAAAA',
+    image: 'data:image/webp;base64,UklGRh4BAABXRUJQVlA4IBIBAACQHgCdASraAQEBPp1OpE4lpCOiICgAsBOJaW7hd2EbQAnsA99snIe+2TkPfbJyHvtk5D32ych77ZOQ99snIe+2TkPfbJyHvtk5D32ych77ZOQ99snIe+2TkPfbJyHvtk5D32ych77ZOQ99snIe+2TkPfbJyHvtk5D32ych77ZOQ99snIe+2TkPfbJyHvtk5D32ych77ZOQ99snIe+2TkPfbJyHvtk5D32ych77ZOQ99snIe+2TkPfbJyHvtk5D32ych77ZOQ99snIe+2TkPfbJyHvtk5D32ych77ZOQ99snIe+2TkN4AP7/1hgAAAAAAAAAAAAAAAAAAAAA',
     author: 'Krishna Chavan',
     createdAt: new Date().toISOString(),
     tags: ['WebDev', 'React', 'Node.js', 'JavaScript'],

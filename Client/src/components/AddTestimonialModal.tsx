@@ -16,6 +16,7 @@ import { addTestimonial, updateTestimonial } from '@/redux/slices/testimonialsSl
 import { AppDispatch } from '@/redux/store';
 import { toast } from 'sonner';
 import { MessageSquare, User, Building, Star, Camera, Sparkles } from 'lucide-react';
+import { SERVER_BASE_URL } from '@/api';
 
 export const AddTestimonialModal = ({ isOpen, onClose, testimonial }) => {
   const dispatch = useDispatch<AppDispatch>();
@@ -33,7 +34,7 @@ export const AddTestimonialModal = ({ isOpen, onClose, testimonial }) => {
       setCompany(testimonial.company);
       setRating(testimonial.rating || 5);
       if (testimonial.image) {
-        setImagePreview(`http://localhost:3001${testimonial.image}`);
+        setImagePreview(`${SERVER_BASE_URL}${testimonial.image}`);
       }
     } else {
       setName('');

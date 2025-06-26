@@ -54,7 +54,7 @@ export const Contact = () => {
     setSubmitStatus("idle")
 
     try {
-      await apiClient.post("/api/contact", formData)
+      await apiClient.post("/contact", formData)
 
       setSubmitStatus("success")
       toast({

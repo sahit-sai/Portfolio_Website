@@ -1,7 +1,7 @@
 "use client"
 
 import type React from "react"
-
+import axios from "axios"
 import { useState, useEffect } from "react"
 import { useDispatch } from "react-redux"
 import { addBlog, updateBlog } from "../redux/slices/blogsSlice"
@@ -23,6 +23,7 @@ export const AddBlogModal = ({ isOpen, blog, onClose }: AddBlogModalProps) => {
   const [title, setTitle] = useState("")
   const [content, setContent] = useState("")
   const [image, setImage] = useState("")
+  const [uploading, setUploading] = useState(false)
   const dispatch = useDispatch<AppDispatch>()
 
   useEffect(() => {
@@ -36,6 +37,30 @@ export const AddBlogModal = ({ isOpen, blog, onClose }: AddBlogModalProps) => {
       setImage("")
     }
   }, [blog])
+
+  const uploadFileHandler = async (e: React.ChangeEvent<HTMLInputElement>) => {
+    const file = e.target.files?.[0]
+    if (!file) return
+
+    const formData = new FormData()
+    formData.append("image", file)
+    setUploading(true)
+
+    try {
+      const config = {
+        headers: {
+          "Content-Type": "multipart/form-data",
+        },
+      }
+
+      const { data } = await axios.post("/api/upload", formData, config)
+      setImage(data)
+      setUploading(false)
+    } catch (error) {
+      console.error(error)
+      setUploading(false)
+    }
+  }
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault()
@@ -108,23 +133,30 @@ export const AddBlogModal = ({ isOpen, blog, onClose }: AddBlogModalProps) => {
               />
             </div>
 
-            {/* Image URL */}
+            {/* Image Upload */}
             <div className="space-y-2">
               <Label
                 htmlFor="image"
                 className="text-sm font-semibold text-gray-700 dark:text-gray-300 flex items-center gap-2"
               >
                 <ImageIcon className="h-4 w-4 text-blue-500" />
-                Featured Image URL
+                Featured Image
               </Label>
               <Input
                 id="image"
-                placeholder="https://example.com/featured-image.jpg"
+                placeholder="Enter image path"
                 value={image}
                 onChange={(e) => setImage(e.target.value)}
                 className="h-12 bg-gray-50 dark:bg-gray-800 border-gray-200 dark:border-gray-700 rounded-xl focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all duration-300"
                 required
               />
+              <Input
+                id="image-file"
+                type="file"
+                onChange={uploadFileHandler}
+                className="h-12 bg-gray-50 dark:bg-gray-800 border-gray-200 dark:border-gray-700 rounded-xl"
+              />
+              {uploading && <div>Uploading...</div>}
             </div>
           </div>
 

@@ -123,7 +123,12 @@ const BlogDetail = () => {
   const handleAddComment = (e: React.FormEvent) => {
     e.preventDefault()
     if (newComment.trim() && id) {
-      dispatch(addComment({ blogId: id, author: commentAuthor || "Anonymous", content: newComment }))
+      dispatch(
+        addComment({
+          blogId: id,
+          commentData: { author: commentAuthor || "Anonymous", content: newComment },
+        })
+      )
       setNewComment("")
       setCommentAuthor("")
     }
@@ -155,7 +160,7 @@ const BlogDetail = () => {
       <div className="min-h-screen bg-gradient-to-br from-slate-50 to-blue-50 dark:from-slate-900 dark:to-blue-900/20 flex items-center justify-center">
         <div className="text-center">
           <h2 className="text-2xl font-bold text-gray-900 dark:text-gray-100 mb-4">Blog not found</h2>
-          <Link to="/#blogs">
+          <Link to="/">
             <Button className="bg-gradient-to-r from-blue-600 to-purple-600">
               <ArrowLeft className="w-4 h-4 mr-2" />
               Back to Blogs
@@ -330,9 +335,8 @@ const BlogDetail = () => {
                         <a
                           key={item.id}
                           href={`#${item.id}`}
-                          className={`block text-sm text-gray-600 dark:text-gray-400 hover:text-blue-600 dark:hover:text-blue-400 transition-colors ${
-                            item.level > 1 ? "ml-4" : ""
-                          }`}
+                          className={`block text-sm text-gray-600 dark:text-gray-400 hover:text-blue-600 dark:hover:text-blue-400 transition-colors ${item.level > 1 ? "ml-4" : ""
+                            }`}
                         >
                           {item.title}
                         </a>
@@ -388,7 +392,7 @@ const BlogDetail = () => {
                       </Avatar>
                       <div className="w-full">
                         <Input
-                          placeholder="Your name (optional)"
+                          placeholder="Your name"
                           value={commentAuthor}
                           onChange={(e) => setCommentAuthor(e.target.value)}
                           className="mb-2 bg-slate-100 dark:bg-slate-700 border-slate-300 dark:border-slate-600 focus:ring-blue-500"
