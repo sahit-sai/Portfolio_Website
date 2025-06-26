@@ -19,7 +19,9 @@ connectDB();
 const app = express();
 
 // Middleware
-const allowedOrigins = process.env.FRONTEND_URL.split(",").map((origin) => origin.trim());
+const allowedOrigins = process.env.FRONTEND_URL.split(",").map((origin) =>
+  origin.trim()
+);
 app.use(cors({ origin: allowedOrigins, credentials: true }));
 app.use(express.json());
 
