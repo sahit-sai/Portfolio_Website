@@ -19,7 +19,8 @@ connectDB();
 const app = express();
 
 // Middleware
-app.use(cors({ origin: ["http://localhost:5173", "http://localhost:8080"] }));
+const allowedOrigins = process.env.FRONTEND_URL.split(",").map((origin) => origin.trim());
+app.use(cors({ origin: allowedOrigins, credentials: true }));
 app.use(express.json());
 
 // Static folder for uploads
