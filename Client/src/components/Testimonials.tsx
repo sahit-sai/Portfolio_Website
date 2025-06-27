@@ -6,6 +6,8 @@ import { fetchTestimonials } from "@/redux/slices/testimonialsSlice"
 import type { RootState, AppDispatch } from "@/redux/store"
 import { Star, Quote, Sparkles } from "lucide-react"
 
+const API_BASE_URL = import.meta.env.VITE_API_BASE_URL
+
 // Static fallback data
 const staticTestimonials = [
   {
@@ -57,9 +59,9 @@ export const Testimonials = () => {
   const testimonialsToDisplay = status === "failed" || testimonials.length === 0 ? staticTestimonials : testimonials
 
   const getImageUrl = (imagePath: string) => {
-    if (!imagePath) return "/placeholder.svg?height=60&width=60"
+    if (!imagePath) return ""
     if (imagePath.startsWith("http")) return imagePath
-    return `http://localhost:3001${imagePath}`
+    return `${API_BASE_URL}${imagePath}`
   }
 
   return (
