@@ -55,7 +55,9 @@ export const About = () => {
     }
   ];
 
-  const timelineItems = status === 'succeeded' && Array.isArray(timeline) && timeline.length > 0 ? timeline : staticTimelineData;
+  const timelineItems = status === 'succeeded' && Array.isArray(timeline) && timeline.length > 0
+    ? [...timeline].reverse() // Show most recent first
+    : staticTimelineData;
   const mainTimeline = timelineItems.slice(0, 4);
   const additionalTimeline = timelineItems.slice(4);
 
