@@ -18,40 +18,83 @@ export const About = () => {
 
   const staticTimelineData = [
     {
-      _id: 'static-1',
-      title: 'B.Sc in Computer Science',
-      company: 'XYZ University',
-      description: 'Graduated with a solid foundation in computer science principles, algorithms, and software development.',
-      year: '2020-2023',
-      type: 'education',
-      achievements: ['Dean\'s List for Academic Excellence', 'Published a research paper on AI', 'Led the college coding club'],
+      _id: "685e4aaec366e3179143c015",
+      title: "Secondary School Education (Class 10 – CBSE)",
+      company: "Vivekananda English School, Partur",
+      year: "2019–2020",
+      description: "Completed Class 10 under the CBSE curriculum with a strong academic and co-curricular record. Demonstrated excellence in academics and active participation in sports.",
+      type: "education",
+      achievements: [
+        "Scored 80.2% in Class 10 CBSE Board Exams",
+        "Second topper of the school in the Olympiad Exam"
+      ]
     },
     {
-      _id: 'static-2',
-      title: 'Freelance Web Developer',
-      company: 'Self-Employed',
-      description: 'Started my journey as a freelance developer, working with clients to build modern and responsive websites.',
-      year: '2023-Present',
-      type: 'work',
-      achievements: ['Delivered 5+ client projects successfully', 'Achieved 100% client satisfaction', 'Specialized in the MERN stack'],
+      _id: "685e4bf2c366e3179143c02e",
+      title: "Higher Secondary Education (Science Stream)",
+      company: "Badrinarayan Barwale Junior College, Jalna",
+      year: "2020–2022",
+      description: "Completed 11th and 12th grade in the Science stream. Consistently ranked among the top 5 students in the college, demonstrating strong academic performance and discipline.",
+      type: "education",
+      achievements: [
+        "Scored 88.98% in the MHT-CET (entrance exam), reflecting excellent preparation and subject knowledge."
+      ]
     },
     {
-      _id: 'static-3',
-      title: 'MERN Stack Certification',
-      company: 'Online Bootcamp',
-      description: 'Completed an intensive certification program focused on MongoDB, Express.js, React, and Node.js.',
-      year: '2022',
-      type: 'education',
-      achievements: ['Built a full-stack e-commerce application', 'Mastered REST API design and implementation', 'Gained expertise in state management with Redux'],
+      _id: "685e4c30c366e3179143c03b",
+      title: "B.E. in Computer Engineering",
+      company: "Sandip Institute of Technology and Research Centre",
+      year: "2022-2026",
+      description: "CGPA: 9.14\nCore Subjects: Data Structures, Operating Systems, Database Management Systems, Machine Learning",
+      type: "education",
+      achievements: [
+        "🥇 Won 1st Prize in Tie-Day competition at SANDIPOTSAV 2K23",
+        "🤝 Selected as Class Representative and Cultural Head of CESA, showcasing leadership and teamwork",
+        "📜 Earned certification in Java + DSA from Apna College",
+        "✅ Solved 90+ DSA problems to strengthen core programming skills"
+      ]
     },
     {
-      _id: 'static-4',
-      title: 'UI/UX Design Workshop',
-      company: 'Design Institute',
-      description: 'Participated in a workshop to enhance skills in user interface and user experience design principles.',
-      year: '2021',
-      type: 'education',
-      achievements: ['Learned Figma and Adobe XD for prototyping', 'Applied user-centered design methodologies', 'Improved visual design and layout skills'],
+      _id: "685e4e16c366e3179143c048",
+      title: "Full Stack Developer Intern",
+      company: "Cloud Counselage Pvt. Ltd., Mumbai",
+      year: "Sep 13 – Nov 8, 2024",
+      description: "Worked on full stack web development projects as part of the internship program. Gained hands-on experience with both frontend and backend technologies through real-world applications.",
+      type: "work",
+      achievements: [
+        "Attended multiple workshops focused on corporate and business ethics",
+        "Strengthened core concepts in frontend and backend development",
+        "Collaborated effectively within a professional team environment",
+        "Gained exposure to industry-level workflows and project management practices"
+      ]
+    },
+    {
+      _id: "685e4f85c366e3179143c055",
+      title: "Freelance Full-Stack Web Developer",
+      company: "crackoffcampus.com (Startup)",
+      year: "April-May 2024",
+      description: "Designed and developed a complete job-portal website for a startup, handling both front-end and back-end. Ensured on-time delivery and a clean, user-friendly interface.",
+      type: "work",
+      achievements: [
+        "Delivered the project on the agreed deadline with excellent client feedback",
+        "1000 + active users within months of launch",
+        "Integrated Cashfree as the payment gateway for premium services",
+        "Built an admin dashboard for posting jobs; applicants can apply directly"
+      ]
+    },
+    {
+      _id: "685e5175c366e3179143c074",
+      title: "Full Stack Developer Intern",
+      company: "World Door Infotech Pvt. Ltd., Pune",
+      year: "June 2025 – Present",
+      description: "Currently working as a full stack developer intern contributing to multiple live projects. Responsible for both frontend and backend development to build scalable and user-friendly web solutions.",
+      type: "work",
+      achievements: [
+        "Worked on the production website ekoham.co.in",
+        "Currently improving and restructuring unochargers.in for better performance and usability",
+        "Gained experience in real-time development, deployment, and collaboration with teams",
+        "Ensured clean UI/UX, optimized structure, and functional integrity across projects"
+      ]
     }
   ];
 
