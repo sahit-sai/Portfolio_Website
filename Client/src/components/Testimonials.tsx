@@ -7,6 +7,7 @@ import type { RootState, AppDispatch } from "@/redux/store"
 import { Star, Quote, Sparkles } from "lucide-react"
 
 const API_BASE_URL = import.meta.env.VITE_API_BASE_URL
+console.log("API_BASE_URL", API_BASE_URL);
 
 // Static fallback data
 const staticTestimonials = [
