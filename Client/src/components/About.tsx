@@ -20,6 +20,7 @@ export const About = () => {
     {
       _id: 'static-1',
       title: 'B.Sc in Computer Science',
+      company: 'XYZ University',
       description: 'Graduated with a solid foundation in computer science principles, algorithms, and software development.',
       year: '2020-2023',
       type: 'education',
@@ -28,6 +29,7 @@ export const About = () => {
     {
       _id: 'static-2',
       title: 'Freelance Web Developer',
+      company: 'Self-Employed',
       description: 'Started my journey as a freelance developer, working with clients to build modern and responsive websites.',
       year: '2023-Present',
       type: 'work',
@@ -36,6 +38,7 @@ export const About = () => {
     {
       _id: 'static-3',
       title: 'MERN Stack Certification',
+      company: 'Online Bootcamp',
       description: 'Completed an intensive certification program focused on MongoDB, Express.js, React, and Node.js.',
       year: '2022',
       type: 'education',
@@ -44,6 +47,7 @@ export const About = () => {
     {
       _id: 'static-4',
       title: 'UI/UX Design Workshop',
+      company: 'Design Institute',
       description: 'Participated in a workshop to enhance skills in user interface and user experience design principles.',
       year: '2021',
       type: 'education',
@@ -203,7 +207,8 @@ export const About = () => {
                               {item.type}
                             </Badge>
                           </div>
-                          <h4 className="font-bold text-xl mb-3 text-gray-900">{item.title}</h4>
+                          <h4 className="font-bold text-xl mb-1 text-gray-900">{item.title}</h4>
+                          <div className="text-base font-medium text-gray-700 mb-2">{item.company}</div>
                           <p className="text-gray-600 mb-4 leading-relaxed">{item.description}</p>
                           <div className="space-y-2">
                             <h5 className="font-semibold text-gray-800">Key Achievements:</h5>
@@ -248,7 +253,8 @@ export const About = () => {
                             {item.type}
                           </Badge>
                         </div>
-                        <h4 className="font-bold text-xl mb-3 text-gray-900">{item.title}</h4>
+                        <h4 className="font-bold text-xl mb-1 text-gray-900">{item.title}</h4>
+                        <div className="text-base font-medium text-gray-700 mb-2">{item.company}</div>
                         <p className="text-gray-600 mb-4 leading-relaxed">{item.description}</p>
                         <div className="space-y-2">
                           <h5 className="font-semibold text-gray-800">Key Achievements:</h5>
