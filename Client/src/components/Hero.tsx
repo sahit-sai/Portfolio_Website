@@ -64,7 +64,7 @@ export const Hero = () => {
               </Button>
             </a>
 
-            <a href="/Krishna_Chavan_Resume.pdf" download="Krishna_Chavan_Resume.pdf">
+            <a href="/Krishna_Chavan_Resume.pdf.pdf" download="Krishna_Chavan_Resume.pdf">
               <Button
                 variant="outline"
                 size="lg"
