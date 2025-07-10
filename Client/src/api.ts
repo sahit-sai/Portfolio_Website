@@ -7,7 +7,7 @@ export const SERVER_BASE_URL =
 
 // Create an axios instance with a base URL from environment variables
 const apiClient = axios.create({
-  baseURL: API_BASE_URL,
+  baseURL: API_BASE_URL, // Should resolve to https://portfolio-website-drpr.onrender.com/api
 });
 
 // Add a request interceptor to include the token in headers
