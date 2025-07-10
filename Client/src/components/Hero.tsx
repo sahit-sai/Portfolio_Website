@@ -39,7 +39,7 @@ export const Hero = () => {
 
           <h1 className="text-4xl sm:text-6xl lg:text-7xl xl:text-8xl font-bold mb-6 leading-tight">
             <span className="bg-gradient-to-r from-gray-900 via-blue-900 to-purple-900 dark:from-white dark:via-blue-100 dark:to-purple-100 bg-clip-text text-transparent animate-gradient">
-              Krishna Chavan
+              Sahit Sai
             </span>
           </h1>
 
@@ -53,7 +53,7 @@ export const Hero = () => {
           </p>
 
           <div className="flex flex-col sm:flex-row gap-4 justify-center items-center mb-12">
-            <a href="https://wa.me/919284769125" target="_blank" rel="noopener noreferrer">
+            <a href="https://wa.me/917842410691" target="_blank" rel="noopener noreferrer">
               <Button
                 size="lg"
                 className="group bg-gradient-to-r from-blue-600 via-purple-600 to-indigo-600 hover:from-blue-700 hover:via-purple-700 hover:to-indigo-700 text-white px-8 py-4 text-lg font-semibold rounded-xl shadow-xl hover:shadow-2xl transform transition-all duration-300 hover:scale-105"
@@ -64,7 +64,7 @@ export const Hero = () => {
               </Button>
             </a>
 
-            <a href="/Krishna_Chavan_Resume.pdf.pdf" download="Krishna_Chavan_Resume.pdf">
+            <a href="/Sais Portfolio.pdf" download="Sais Portfolio.pdf">
               <Button
                 variant="outline"
                 size="lg"
