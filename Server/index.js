@@ -19,11 +19,19 @@ connectDB();
 const app = express();
 
 // Middleware
-const allowedOrigins = process.env.FRONTEND_URL.split(",").map((origin) =>
-  origin.trim()
+const allowedOrigins = [
+  "http://localhost:8080",
+  "https://portfolio-website-pi-drab-56.vercel.app",
+];
+app.use(
+  cors({
+    origin: allowedOrigins,
+    methods: ["GET", "POST", "PUT", "DELETE"],
+    credentials: true,
+  })
 );
-app.use(cors({ origin: allowedOrigins, credentials: true }));
 app.use(express.json());
+app.options("*", cors());
 
 // Static folder for uploads
 const __filename = fileURLToPath(import.meta.url);
@@ -38,12 +46,11 @@ app.use((req, res, next) => {
 
 // API Routes
 app.use("/api/auth", authRoutes);
+app.use("/api/timeline", timelineRoutes);
 app.use("/api/projects", projectRoutes);
 app.use("/api/testimonials", testimonialRoutes);
-app.use("/api/contact", contactRoutes);
 app.use("/api/blogs", blogRoutes);
 app.use("/api/subscribe", subscriberRoutes);
-app.use("/api/timeline", timelineRoutes);
 app.use("/api/upload", uploadRoutes);
 
 // Error handling middleware
