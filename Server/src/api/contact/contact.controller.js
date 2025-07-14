@@ -5,9 +5,24 @@ import { sendMail } from "../../utils/emailService.js";
 // @route   POST /api/contact
 // @access  Public
 export const createContactMessage = async (req, res, next) => {
+  console.log("=== Contact Message Creation ===");
+  console.log("Request body:", req.body);
+  console.log("Request headers:", req.headers);
+  
   const { name, email, subject, message } = req.body;
 
+  // Validate required fields
+  if (!name || !email || !subject || !message) {
+    console.log("Validation failed: Missing required fields");
+    return res.status(400).json({
+      success: false,
+      message: "All fields (name, email, subject, message) are required",
+    });
+  }
+
   try {
+    console.log("Creating contact message with data:", { name, email, subject });
+    
     const newContact = new Contact({
       name,
       email,
@@ -16,6 +31,7 @@ export const createContactMessage = async (req, res, next) => {
     });
 
     const contact = await newContact.save();
+    console.log("Contact message saved successfully:", contact._id);
 
     // Send email notification to admin
     try {

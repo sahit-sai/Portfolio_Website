@@ -59,11 +59,14 @@ app.use((req, res, next) => {
 });
 
 // API Routes
+console.log("Registering API routes...");
 app.use("/api/auth", authRoutes);
 app.use("/api/timeline", timelineRoutes);
 app.use("/api/projects", projectRoutes);
 app.use("/api/testimonials", testimonialRoutes);
 app.use("/api/blogs", blogRoutes);
+app.use("/api/contact", contactRoutes);
+console.log("Contact routes registered at /api/contact");
 app.use("/api/subscribe", subscriberRoutes);
 app.use("/api/upload", uploadRoutes);
 
