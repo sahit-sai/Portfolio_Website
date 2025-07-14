@@ -4,6 +4,7 @@ import { getProjects } from "@/redux/slices/projectsSlice";
 import { RootState, AppDispatch } from "@/redux/store/store";
 import { Button } from "@/components/ui/button";
 import { ExternalLink, Github } from "lucide-react";
+import { SERVER_BASE_URL } from "@/api";
 
 // Static fallback data
 const staticProjects = [
@@ -59,6 +60,15 @@ export const Portfolio = () => {
 
   const projectsToDisplay = status === 'failed' || projects.length === 0 ? staticProjects : projects;
 
+  const getImageUrl = (imagePath: string) => {
+    if (!imagePath) return "/placeholder.svg";
+    if (imagePath.startsWith("http")) return imagePath;
+    if (imagePath.startsWith("/uploads")) {
+      return `${SERVER_BASE_URL}${imagePath}`;
+    }
+    return imagePath;
+  };
+
   return (
     <section id="portfolio" className="py-20 bg-muted/30">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
@@ -77,7 +87,7 @@ export const Portfolio = () => {
             <div key={project._id} className="group bg-card rounded-2xl shadow-lg overflow-hidden hover:shadow-xl transition-all duration-300">
               <div className="relative overflow-hidden">
                 <img
-                  src={project.image}
+                  src={getImageUrl(project.image)}
                   alt={project.title}
                   className="w-full h-64 object-cover group-hover:scale-105 transition-transform duration-300"
                 />

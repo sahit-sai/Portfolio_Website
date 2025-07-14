@@ -18,8 +18,15 @@ export const getTestimonials = async (req, res, next) => {
 // @route   POST /api/testimonials
 // @access  Private
 export const createTestimonial = async (req, res, next) => {
+  console.log("=== Create Testimonial Request ===");
+  console.log("Request body:", req.body);
+  console.log("Request file:", req.file);
+  console.log("Request headers:", req.headers);
+
   const { name, company, quote, rating } = req.body;
   const image = req.file ? `/uploads/testimonials/${req.file.filename}` : null;
+
+  console.log("Extracted data:", { name, company, quote, rating, image });
 
   try {
     const newTestimonial = new Testimonial({
@@ -42,8 +49,10 @@ export const createTestimonial = async (req, res, next) => {
     }
 
     const testimonial = await newTestimonial.save();
+    console.log("Testimonial saved successfully:", testimonial._id);
     res.status(201).json(testimonial);
   } catch (error) {
+    console.error("Testimonial creation error:", error);
     next(error);
   }
 };

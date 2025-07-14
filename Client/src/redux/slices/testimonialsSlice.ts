@@ -54,12 +54,13 @@ export const addTestimonial = createAsyncThunk(
         {
           headers: {
             Authorization: `Bearer ${token}`,
-            "Content-Type": "multipart/form-data",
+            // Don't set Content-Type for FormData, let browser set it with boundary
           },
         }
       );
       return response.data;
     } catch (error: any) {
+      console.error("Add testimonial error:", error);
       return rejectWithValue(error.response?.data?.message || error.message);
     }
   }
@@ -80,12 +81,13 @@ export const updateTestimonial = createAsyncThunk(
         {
           headers: {
             Authorization: `Bearer ${token}`,
-            "Content-Type": "multipart/form-data",
+            // Don't set Content-Type for FormData, let browser set it with boundary
           },
         }
       );
       return response.data;
     } catch (error: any) {
+      console.error("Update testimonial error:", error);
       return rejectWithValue(error.response?.data?.message || error.message);
     }
   }

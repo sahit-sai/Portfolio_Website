@@ -59,6 +59,7 @@ export const AddBlogModal = ({ isOpen, blog, onClose }: AddBlogModalProps) => {
       }
       // Use SERVER_BASE_URL for correct backend upload URL
       const { data } = await axios.post(`${SERVER_BASE_URL}/api/upload`, formData, config)
+      // Backend returns path like "/uploads/blogs/image-123456789.jpg"
       setImage(data)
       setUploading(false)
     } catch (error) {
@@ -72,7 +73,7 @@ export const AddBlogModal = ({ isOpen, blog, onClose }: AddBlogModalProps) => {
     const blogData = {
       title,
       content,
-      image: image?.replace(SERVER_BASE_URL, ""),
+      image, // Use the image path as returned by the upload API
       category,
     }
 
@@ -164,7 +165,7 @@ export const AddBlogModal = ({ isOpen, blog, onClose }: AddBlogModalProps) => {
               {image && (
                 <div className="flex justify-center">
                   <img
-                    src={image.startsWith("/uploads") ? `${SERVER_BASE_URL}${image}` : image}
+                    src={image.startsWith("/") ? `${SERVER_BASE_URL}${image}` : image}
                     alt="Blog"
                     className="max-h-32 sm:max-h-40 mt-2 rounded-lg object-cover border-2 border-gray-200 dark:border-gray-700"
                   />

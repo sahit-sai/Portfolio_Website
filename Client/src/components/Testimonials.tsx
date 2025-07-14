@@ -5,9 +5,7 @@ import { useDispatch, useSelector } from "react-redux"
 import { fetchTestimonials } from "@/redux/slices/testimonialsSlice"
 import type { RootState, AppDispatch } from "@/redux/store"
 import { Star, Quote, Sparkles } from "lucide-react"
-
-const API_BASE_URL = import.meta.env.VITE_API_BASE_URL
-console.log("API_BASE_URL", API_BASE_URL);
+import { SERVER_BASE_URL } from "@/api"
 
 // Static fallback data
 const staticTestimonials = [
@@ -62,7 +60,7 @@ export const Testimonials = () => {
   const getImageUrl = (imagePath: string) => {
     if (!imagePath) return ""
     if (imagePath.startsWith("http")) return imagePath
-    return `${API_BASE_URL}${imagePath}`
+    return `${SERVER_BASE_URL}${imagePath}`
   }
 
   return (

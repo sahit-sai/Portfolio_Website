@@ -10,6 +10,7 @@ import blogRoutes from "./src/api/blogs/blog.routes.js";
 import subscriberRoutes from "./src/api/subscribers/subscriber.routes.js";
 import timelineRoutes from "./src/api/timeline/timeline.routes.js";
 import uploadRoutes from "./src/api/upload/upload.routes.js";
+import { handleMulterError } from "./src/middleware/upload.middleware.js";
 import path from "path";
 import { fileURLToPath } from "url";
 
@@ -23,14 +24,27 @@ const allowedOrigins = [
   "http://localhost:8080",
   "https://portfolio-website-pi-drab-56.vercel.app",
 ];
-app.use(
-  cors({
-    origin: allowedOrigins,
-    methods: ["GET", "POST", "PUT", "DELETE"],
-    credentials: true,
-  })
-);
-app.use(express.json());
+
+const corsOptions = {
+  origin: function (origin, callback) {
+    // Allow requests with no origin (like mobile apps or curl requests)
+    if (!origin) return callback(null, true);
+    
+    if (allowedOrigins.indexOf(origin) !== -1) {
+      callback(null, true);
+    } else {
+      console.log("CORS blocked origin:", origin);
+      callback(new Error("Not allowed by CORS"));
+    }
+  },
+  methods: ["GET", "POST", "PUT", "DELETE", "OPTIONS"],
+  allowedHeaders: ["Content-Type", "Authorization", "X-Requested-With", "Accept"],
+  credentials: true,
+};
+
+app.use(cors(corsOptions));
+app.use(express.json({ limit: '10mb' }));
+app.use(express.urlencoded({ extended: true, limit: '10mb' }));
 app.options("*", cors());
 
 // Static folder for uploads
@@ -53,9 +67,16 @@ app.use("/api/blogs", blogRoutes);
 app.use("/api/subscribe", subscriberRoutes);
 app.use("/api/upload", uploadRoutes);
 
+// Add multer error handling
+app.use(handleMulterError);
+
 // Error handling middleware
 app.use((err, req, res, next) => {
-  console.error(err.stack);
+  console.error("=== ERROR MIDDLEWARE ===");
+  console.error("Error:", err);
+  console.error("Error stack:", err.stack);
+  console.error("Request URL:", req.url);
+  console.error("Request method:", req.method);
   const statusCode = err.statusCode || 500;
   const message = err.message || "Something broke!";
   res.status(statusCode).json({

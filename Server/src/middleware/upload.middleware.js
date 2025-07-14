@@ -12,6 +12,11 @@ const ensureDirectoryExists = (dir) => {
 // Configure storage
 const storage = multer.diskStorage({
   destination: (req, file, cb) => {
+    console.log("=== Multer Storage Destination ===");
+    console.log("File fieldname:", file.fieldname);
+    console.log("File originalname:", file.originalname);
+    console.log("File mimetype:", file.mimetype);
+    
     let uploadPath = "uploads/";
 
     // Determine upload path based on fieldname
@@ -30,27 +35,39 @@ const storage = multer.diskStorage({
         uploadPath += "misc/";
     }
 
+    console.log("Upload path determined:", uploadPath);
     ensureDirectoryExists(uploadPath);
     cb(null, uploadPath);
   },
   filename: (req, file, cb) => {
+    console.log("=== Multer Filename Generation ===");
     const uniqueSuffix = Date.now() + "-" + Math.round(Math.random() * 1e9);
     const ext = path.extname(file.originalname);
-    cb(null, file.fieldname + "-" + uniqueSuffix + ext);
+    const filename = file.fieldname + "-" + uniqueSuffix + ext;
+    console.log("Generated filename:", filename);
+    cb(null, filename);
   },
 });
 
 // File filter
 const fileFilter = (req, file, cb) => {
+  console.log("=== Multer File Filter ===");
+  console.log("File:", file);
+  
   const allowedTypes = /jpeg|jpg|png|gif|webp/;
   const extname = allowedTypes.test(
     path.extname(file.originalname).toLowerCase()
   );
   const mimetype = allowedTypes.test(file.mimetype);
 
+  console.log("Extension valid:", extname);
+  console.log("Mimetype valid:", mimetype);
+
   if (mimetype && extname) {
+    console.log("File filter: ACCEPTED");
     return cb(null, true);
   } else {
+    console.log("File filter: REJECTED");
     cb(new Error("Only image files (jpeg, jpg, png, gif, webp) are allowed!"));
   }
 };

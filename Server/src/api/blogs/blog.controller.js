@@ -35,26 +35,89 @@ export const getBlogById = asyncHandler(async (req, res) => {
 // @route   POST /api/blogs
 // @access  Private/Admin
 export const createBlog = asyncHandler(async (req, res) => {
+  console.log("=== Blog Creation Request START ===");
+  console.log("Request method:", req.method);
+  console.log("Request URL:", req.url);
+  console.log("Request headers:", req.headers);
+  console.log("Request body:", req.body);
+  console.log("User from token:", req.user);
+  
   const { title, content, author, tags, category, featured, trending, image } =
     req.body;
 
-  if (!image) {
-    throw new Error("Image URL is required");
-  }
-
-  const newBlog = new Blog({
-    title,
-    content,
+  console.log("Extracted fields:", {
+    title: title ? "present" : "missing",
+    content: content ? "present" : "missing", 
+    image: image ? "present" : "missing",
     author,
-    image,
-    tags,
     category,
     featured,
-    trending,
+    trending
   });
 
-  const createdBlog = await newBlog.save();
-  res.status(201).json(createdBlog);
+  // Validate required fields
+  if (!title || !content) {
+    console.log("Validation failed: Missing title or content");
+    return res.status(400).json({
+      success: false,
+      message: "Title and content are required",
+    });
+  }
+
+  if (!image) {
+    console.log("Validation failed: Missing image");
+    return res.status(400).json({
+      success: false,
+      message: "Image URL is required",
+    });
+  }
+
+  try {
+    console.log("Creating blog with data:", {
+      title,
+      content: content.substring(0, 50) + "...",
+      author: author || "Admin",
+      image,
+      tags: tags || [],
+      category: category || "General",
+      featured: featured || false,
+      trending: trending || false,
+    });
+
+    const newBlog = new Blog({
+      title,
+      content,
+      author: author || "Admin",
+      image,
+      tags: tags || [],
+      category: category || "General",
+      featured: featured || false,
+      trending: trending || false,
+    });
+
+    console.log("Blog object created, attempting to save...");
+    const createdBlog = await newBlog.save();
+    console.log("Blog saved successfully:", createdBlog._id);
+    
+    res.status(201).json({
+      success: true,
+      data: createdBlog,
+    });
+  } catch (error) {
+    console.error("Blog creation error:", error);
+    console.error("Error name:", error.name);
+    console.error("Error message:", error.message);
+    console.error("Error stack:", error.stack);
+    if (error.errors) {
+      console.error("Validation errors:", error.errors);
+    }
+    res.status(500).json({
+      success: false,
+      message: "Failed to create blog",
+      error: error.message,
+      details: error.errors || null
+    });
+  }
 });
 
 // @desc    Update a blog post
